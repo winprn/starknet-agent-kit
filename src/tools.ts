@@ -1,8 +1,8 @@
 import { Tool, tool } from '@langchain/core/tools';
 import { z } from 'zod';
 import { getBalance, getOwnBalance } from './Method/read/balance.js'
-import { CreateOZAccount } from './Method/Account/CreateAccount.js';
-import { CreateArgentAccount } from './Method/Account/CreateAccount.js';
+import { CreateOZAccount,CreateArgentAccount } from './Method/Account/CreateAccount.js';
+import { DeployOZAccount,DeployArgentAccount } from './Method/Account/DeployAccount.js';
 
 // Types
 type StarknetAgentInterface = {
@@ -35,6 +35,14 @@ const getBalanceSchema = z.object({
     .describe('The asset symbol to get the balance of. eg. USDC, ETH'),
 });
 
+const DeployArgentAccountSchema = z.object({
+  publicKeyAX : z
+    .string()
+    .describe('The public key to deploy the Argent Account'),
+  privateKeyAX : z
+    .string()
+    .describe('The private key to deploy the Argent Account'),
+});
 /**
  * Creates and returns balance checking tools with injected agent credentials
  */
@@ -57,4 +65,9 @@ export const createTools = (agent: StarknetAgentInterface) => [
     name : 'CreateArgentAccount',
     description : 'Create Account account',
   }),
+  tool(DeployArgentAccount,{
+    name : 'DeployArgent',
+    description : "Deploy a Argent Account",
+    schema : DeployArgentAccountSchema,
+  })
 ];
