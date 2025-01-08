@@ -1,8 +1,8 @@
-import { Account, constants, ec, json, stark, RpcProvider, hash, CallData } from 'starknet';
-import { tokenAddresses, DEFAULT_RPC_URL } from '../../utils/constants';
+import {ec, stark, RpcProvider, hash, CallData } from 'starknet';
+import {RPC_URL } from '../../utils/constants';
 
 
-const provider = new RpcProvider({ nodeUrl: process.env.STARKNET_RPC_URL || DEFAULT_RPC_URL });
+const provider = new RpcProvider({ nodeUrl: RPC_URL });
 
 export const CreateOZAccount = async () => {
     try {

@@ -1,9 +1,9 @@
 import { Account, Contract, RpcProvider } from 'starknet';
-import { tokenAddresses, DEFAULT_RPC_URL } from '../../utils/constants';
+import { tokenAddresses, RPC_URL } from '../../utils/constants';
 
 
 // Initialize provider
-const provider = new RpcProvider({ nodeUrl: process.env.STARKNET_RPC_URL || DEFAULT_RPC_URL });
+const provider = new RpcProvider({ nodeUrl: RPC_URL });
 
 export type GetOwnBalanceParams = {
   symbol: string;
@@ -72,7 +72,7 @@ export const getBalance = async (params: GetBalanceParams) => {
 
     const rawBalance = balance.balance.toString();
     
-    const decimalBalance = formatBalance(rawBalance);
+    console.log(rawBalance);
     return JSON.stringify({
       status: 'success',
       balance: balance.balance.toString(),

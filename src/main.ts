@@ -36,7 +36,7 @@ async function main() {
         });
 
         await agent.execute(
-            "Creer moi un compte Argent",
+            "Creer un wallet",
         );
     } catch (error) {
         console.error('❌ Error:', error instanceof Error ? error.message : 'Unknown error');

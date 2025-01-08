@@ -1,3 +1,7 @@
+import { config } from 'dotenv';
+
+config()
+
 export const tokenAddresses: { [key: string]: string } = {
     'ETH': '0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7',
     'USDC': '0x053c91253bc9682c04929ca02ed00b3e423f6710d2ee7e0d5ebb06f3ecf368a8',
@@ -6,4 +10,4 @@ export const tokenAddresses: { [key: string]: string } = {
 
 };
 
-export const DEFAULT_RPC_URL = 'https://starknet-mainnet.g.alchemy.com/starknet/version/rpc/v0_7/Xj-rCxxzGcBnS3HwqOnBqO8TMa8NRGky';
+export const RPC_URL = process.env.RPC_URL;

@@ -2,7 +2,6 @@ import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { createToolCallingAgent, AgentExecutor } from 'langchain/agents';
 import { ChatAnthropic } from '@langchain/anthropic';
 import { SystemMessage } from '@langchain/core/messages';
-import { get_starknet_private_key } from './utils/starknet';
 import { createTools } from './tools.js';
 
 interface Credentials {
@@ -18,7 +17,7 @@ const systemMessage = new SystemMessage(
     If the transaction was successful, return the response in the following format:
     The transaction was successful. The explorer link is: https://starkscan.co/tx/0x{transaction_hash}
     If the read function get_own_balance is succesful return the response in the following format :
-    Your balance = {balance}. And the balance value if its a USDT or USDC do a padding of 16 decimal otherwise do a 18 decimal padding
+    Your balance = {balance}. And the balance value if its a USDT or USDC do a padding of 6 decimal otherwise do a 18 decimal padding
     When you use CreateOZAccount or CreateArgentAccount if is succesful, return the response in the following format :
     Your {wallet} account has been created with the public key : {new_account_public_key}.
     If the transaction was unsuccessful, return the response in the following format, followed by an explanation if any known:
