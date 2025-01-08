@@ -1,9 +1,10 @@
 import { Account, Contract, RpcProvider } from 'starknet';
-import { tokenAddresses, DEFAULT_RPC_URL } from '../../utils/constants';
-
+import { DEFAULT_RPC_URL, tokenAddresses } from '../constant';
 
 // Initialize provider
-const provider = new RpcProvider({ nodeUrl: process.env.STARKNET_RPC_URL || DEFAULT_RPC_URL });
+const provider = new RpcProvider({
+  nodeUrl: process.env.STARKNET_RPC_URL || DEFAULT_RPC_URL,
+});
 
 export type GetOwnBalanceParams = {
   symbol: string;
@@ -12,16 +13,19 @@ export type GetOwnBalanceParams = {
 const formatBalance = (rawBalance: string): string => {
   // S'il y a moins de 18 chiffres, ajouter des zéros au début
   const balancePadded = rawBalance.padStart(19, '0');
-  
+
   // Trouver la position du point décimal
   const decimalPosition = balancePadded.length - 18;
-  
+
   // Insérer le point décimal
-  const formattedBalance = balancePadded.slice(0, decimalPosition) + '.' + balancePadded.slice(decimalPosition);
-  
+  const formattedBalance =
+    balancePadded.slice(0, decimalPosition) +
+    '.' +
+    balancePadded.slice(decimalPosition);
+
   // Supprimer les zéros inutiles après le point et le point si nécessaire
   return parseFloat(formattedBalance).toString();
-}
+};
 
 export const getOwnBalance = async (
   params: GetOwnBalanceParams,
@@ -48,7 +52,7 @@ export const getOwnBalance = async (
     // Call balanceOf
     const balance = await tokenContract.balanceOf(account.address);
     const rawBalance = balance.balance.toString();
-    
+
     // Gérer le décalage de 18 décimales
     const decimalBalance = formatBalance(rawBalance);
 
@@ -82,9 +86,6 @@ export const getBalance = async (params: GetBalanceParams) => {
     // Call balanceOf
     const balance = await tokenContract.balanceOf(params.walletAddress);
 
-    const rawBalance = balance.balance.toString();
-    
-    const decimalBalance = formatBalance(rawBalance);
     return JSON.stringify({
       status: 'success',
       balance: balance.balance.toString(),
@@ -100,20 +101,20 @@ export const getBalance = async (params: GetBalanceParams) => {
 // Basic ERC20 ABI for balanceOf
 const erc20ABI = [
   {
-    name: "balanceOf",
-    type: "function",
+    name: 'balanceOf',
+    type: 'function',
     inputs: [
       {
-        name: "account",
-        type: "felt"
-      }
+        name: 'account',
+        type: 'felt',
+      },
     ],
     outputs: [
       {
-        name: "balance",
-        type: "Uint256"
-      }
+        name: 'balance',
+        type: 'Uint256',
+      },
     ],
-    stateMutability: "view"
-  }
+    stateMutability: 'view',
+  },
 ];

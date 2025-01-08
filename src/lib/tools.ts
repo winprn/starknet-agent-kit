@@ -1,6 +1,6 @@
 import { tool } from '@langchain/core/tools';
 import { z } from 'zod';
-import { getBalance, getOwnBalance } from './Method/read/balance.js'
+import { getBalance, getOwnBalance } from './method/balance';
 
 // Types
 type StarknetAgentInterface = {
