@@ -10,16 +10,9 @@ export type GetOwnBalanceParams = {
 };
 
 const formatBalance = (rawBalance: string): string => {
-  // S'il y a moins de 18 chiffres, ajouter des zéros au début
   const balancePadded = rawBalance.padStart(19, '0');
-  
-  // Trouver la position du point décimal
   const decimalPosition = balancePadded.length - 18;
-  
-  // Insérer le point décimal
   const formattedBalance = balancePadded.slice(0, decimalPosition) + '.' + balancePadded.slice(decimalPosition);
-  
-  // Supprimer les zéros inutiles après le point et le point si nécessaire
   return parseFloat(formattedBalance).toString();
 }
 
@@ -34,7 +27,7 @@ export const getOwnBalance = async (
       throw new Error('Wallet address not configured');
     }
 
-    // Create account instance
+    // Account Instance
     const account = new Account(provider, walletAddress, privateKey);
 
     const tokenAddress = tokenAddresses[params.symbol];
@@ -42,19 +35,16 @@ export const getOwnBalance = async (
       throw new Error(`Token ${params.symbol} not supported`);
     }
 
-    // Get token contract
     const tokenContract = new Contract(erc20ABI, tokenAddress, provider);
+    console.log(tokenContract);
 
-    // Call balanceOf
     const balance = await tokenContract.balanceOf(account.address);
-    const rawBalance = balance.balance.toString();
-    
-    // Gérer le décalage de 18 décimales
-    const decimalBalance = formatBalance(rawBalance);
 
+    //const decimalBalance = formatBalance(rawBalance);
+    console.log(balance.balance.toString());
     return JSON.stringify({
       status: 'success',
-      balance: decimalBalance,
+      balance: balance.balance.toString(),
     });
   } catch (error) {
     return JSON.stringify({
@@ -76,10 +66,8 @@ export const getBalance = async (params: GetBalanceParams) => {
       throw new Error(`Token ${params.assetSymbol} not supported`);
     }
 
-    // Get token contract
     const tokenContract = new Contract(erc20ABI, tokenAddress, provider);
 
-    // Call balanceOf
     const balance = await tokenContract.balanceOf(params.walletAddress);
 
     const rawBalance = balance.balance.toString();

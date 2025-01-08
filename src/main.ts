@@ -2,12 +2,9 @@ import { StarknetAgent } from './index.js';
 import { config } from 'dotenv';
 import { GetOwnBalanceParams } from './Method/read/balance.js';
 
-// Charger les variables d'environnement
 config();
 
-// Type pour les paramètres de balance
 interface BalanceParams extends GetOwnBalanceParams {
-    // Ajoutez ici les paramètres spécifiques si nécessaire
 }
 
 async function initializeAgent(): Promise<StarknetAgent> {
@@ -34,12 +31,12 @@ async function main() {
         // Vérifier les credentials
         const credentials = agent.getCredentials();
         console.log('🔑 Credentials loaded:', {
-            hasPrivateKey: credentials.walletPrivateKey,
-            hasApiKey: credentials.anthropicApiKey
+            hasPrivateKey: !!credentials.walletPrivateKey,
+            hasApiKey: !!credentials.anthropicApiKey
         });
 
         await agent.execute(
-            'ETH' ,
+            "Creer moi un compte Argent",
         );
     } catch (error) {
         console.error('❌ Error:', error instanceof Error ? error.message : 'Unknown error');

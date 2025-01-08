@@ -1,6 +1,8 @@
 import { createAgent } from './agent.js';
 import type { AgentExecutor } from 'langchain/agents';
-import { getOwnBalance, type GetOwnBalanceParams } from './Method/read/balance.js';
+import { getOwnBalance, type GetOwnBalanceParams} from './Method/read/balance.js';
+import { CreateOZAccount } from './Method/Account/CreateAccount.js';
+
 import { create } from 'domain';
 
 
@@ -45,5 +47,8 @@ export class StarknetAgent {
 
     async getOwnBalance(params: GetOwnBalanceParams) {
         return await getOwnBalance(params, this.walletPrivateKey);
+      }
+      async CreateOZAccount() {
+        return await CreateOZAccount();
       }
 }

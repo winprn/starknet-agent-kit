@@ -1,6 +1,8 @@
-import { tool } from '@langchain/core/tools';
+import { Tool, tool } from '@langchain/core/tools';
 import { z } from 'zod';
 import { getBalance, getOwnBalance } from './Method/read/balance.js'
+import { CreateOZAccount } from './Method/Account/CreateAccount.js';
+import { CreateArgentAccount } from './Method/Account/CreateAccount.js';
 
 // Types
 type StarknetAgentInterface = {
@@ -46,5 +48,13 @@ export const createTools = (agent: StarknetAgentInterface) => [
     name: 'get_balance',
     description: 'Get the balance of an asset for a given wallet address',
     schema: getBalanceSchema,
+  }),
+  tool(CreateOZAccount, {
+    name : 'CreateOZAccount',
+    description : 'Create Open Zeppelin account',
+  }),
+  tool(CreateArgentAccount, {
+    name : 'CreateArgentAccount',
+    description : 'Create Account account',
   }),
 ];
