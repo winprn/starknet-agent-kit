@@ -7,9 +7,9 @@ import {
   Post,
 } from "@nestjs/common";
 import { AgentRequestDTO } from "./dto/agents";
-import { StarknetAgent } from "src/lib/Starknet-Agent-Kit";
 import { CreateAgentDTO } from "./dto/createAgent";
 import { ResponseMessage } from "src/lib/decorators/reponse_message";
+import { StarknetAgent } from "src/lib/agent/Starknet-Agent-Kit";
 
 @Controller("agents")
 export class AgentsController implements OnModuleInit {

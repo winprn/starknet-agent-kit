@@ -1,5 +1,5 @@
 import { Account, Contract, RpcProvider } from 'starknet';
-import { DEFAULT_RPC_URL, tokenAddresses } from '../constant';
+import { DEFAULT_RPC_URL, tokenAddresses } from '../../constant';
 
 // Initialize provider
 const provider = new RpcProvider({
