@@ -15,7 +15,7 @@ const isValidApiKey = (apiKey: string): boolean => {
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
   canActivate(
-    context: ExecutionContext
+    context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest<FastifyRequest>();
     const apiKey = request.headers["x-api-key"] as string;
