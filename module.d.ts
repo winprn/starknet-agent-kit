@@ -3,5 +3,6 @@ declare namespace NodeJS {
     STARKNET_PRIVATE_KEY: string;
     PUBLIC_ADDRESS: string;
     ANTHROPIC_API_KEY: string;
+    RPC_URL: string;
   }
 }
