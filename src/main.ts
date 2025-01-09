@@ -1,48 +1,35 @@
-import { StarknetAgent } from './index.js';
-import { config } from 'dotenv';
-import { GetOwnBalanceParams } from './Method/read/balance.js';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { ValidationPipe } from "@nestjs/common";
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from "@nestjs/platform-fastify";
+import helmet from "helmet";
+import { HttpExceptionFilter } from "./lib/global-filters/http";
+import { allLeftOverExceptionFilter } from "./lib/global-filters/all";
 
-config();
+async function bootstrap() {
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter()
+  );
 
-interface BalanceParams extends GetOwnBalanceParams {
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      validateCustomDecorators: true,
+    })
+  );
+
+  app.useGlobalFilters(
+    new allLeftOverExceptionFilter(),
+    new HttpExceptionFilter()
+  );
+  app.use(helmet({ crossOriginResourcePolicy: false }));
+  app.setGlobalPrefix("/api");
+  await app.listen(process.env.PORT ?? 3000, "0.0.0.0");
 }
-
-async function initializeAgent(): Promise<StarknetAgent> {
-    const privateKey = process.env.STARKNET_PRIVATE_KEY;
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-
-    if (!privateKey || !apiKey) {
-        throw new Error('Missing environment variables. Please check your .env file');
-    }
-
-    return new StarknetAgent({
-        walletPrivateKey: privateKey,
-        anthropicApiKey: apiKey
-    });
-}
-
-async function main() {
-    try {
-        console.log('🚀 Initializing Starknet Agent...');
-        const agent = await initializeAgent();
-        
-        console.log('✅ Agent initialized successfully');
-        
-        // Vérifier les credentials
-        const credentials = agent.getCredentials();
-        console.log('🔑 Credentials loaded:', {
-            hasPrivateKey: !!credentials.walletPrivateKey,
-            hasApiKey: !!credentials.anthropicApiKey
-        });
-
-        await agent.execute(
-            "Salut je voudrais creer mon Account Argent",
-        );
-    } catch (error) {
-        console.error('❌ Error:', error instanceof Error ? error.message : 'Unknown error');
-        process.exit(1);
-    }
-}
-
-// Exécuter le programme
-main().catch(console.error);
+bootstrap();
