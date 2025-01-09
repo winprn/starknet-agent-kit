@@ -1,43 +1,22 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  HttpException,
-  OnModuleInit,
-  Post,
-} from "@nestjs/common";
+import { Body, Controller, OnModuleInit, Post } from "@nestjs/common";
 import { AgentRequestDTO } from "./dto/agents";
-import { CreateAgentDTO } from "./dto/createAgent";
-import { ResponseMessage } from "src/lib/decorators/reponse_message";
 import { StarknetAgent } from "src/lib/agent/Starknet-Agent-Kit";
+import { AgentsService } from "./agents.service";
 
-@Controller("agents")
+@Controller("agent")
 export class AgentsController implements OnModuleInit {
-  agents: Map<string, StarknetAgent>;
+  agent: StarknetAgent;
+  constructor(private readonly agentService: AgentsService) {}
 
   onModuleInit() {
-    this.agents = new Map();
-  }
-
-  @Post("create")
-  @ResponseMessage("Starknet Agent created successfully")
-  async createAgent(@Body() agentConfig: CreateAgentDTO) {
-    const { agentName, ...starknetConfig } = agentConfig;
-    this.agents.set(agentName, new StarknetAgent(starknetConfig));
-
-    return agentName;
+    this.agent = new StarknetAgent({
+      anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+      walletPrivateKey: process.env.STARKNET_PRIVATE_KEY,
+    });
   }
 
   @Post("request")
   async handleUserRequest(@Body() userRequest: AgentRequestDTO) {
-    const agent = this.agents.get(userRequest.agentName);
-
-    if (!agent) {
-      throw new BadRequestException("You must create a starknet agent before");
-    }
-
-    const result = await agent.execute(userRequest.request);
-
-    return result;
+    return await this.agentService.handleUserRequest(this.agent, userRequest);
   }
 }
