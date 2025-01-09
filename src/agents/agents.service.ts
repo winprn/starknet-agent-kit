@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { StarknetAgent } from "src/lib/agent/Starknet-Agent-Kit";
+import { StarknetAgent } from "src/lib/agent/starknetAgent";
 import { AgentRequestDTO } from "./dto/agents";
 
 @Injectable()
