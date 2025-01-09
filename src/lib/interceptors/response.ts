@@ -3,9 +3,9 @@ import {
   ExecutionContext,
   Injectable,
   NestInterceptor,
-} from '@nestjs/common';
-import { map, Observable } from 'rxjs';
-import { Reflector } from '@nestjs/core';
+} from "@nestjs/common";
+import { map, Observable } from "rxjs";
+import { Reflector } from "@nestjs/core";
 
 export interface Response<T> {
   statusCode: number;
@@ -26,11 +26,11 @@ export class ResponseMessageInterceptor<T>
       map((data) => ({
         message:
           (this.reflector.get<string>(
-            'response_message',
+            "response_message",
             context.getHandler(),
           ) ||
             data?.message) ??
-          '',
+          "",
         statusCode: context.switchToHttp().getResponse().statusCode,
         data,
       })),

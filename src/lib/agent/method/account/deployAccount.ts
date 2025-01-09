@@ -5,7 +5,7 @@ const provider = new RpcProvider({ nodeUrl: RPC_URL });
 
 export const DeployOZAccount = async (
   privateKey: string,
-  publicKey: string
+  publicKey: string,
 ) => {
   try {
     const OZaccountClassHash =
@@ -17,7 +17,7 @@ export const DeployOZAccount = async (
       publicKey,
       OZaccountClassHash,
       OZaccountConstructorCallData,
-      0
+      0,
     );
     const OZaccount = new Account(provider, OZcontractAddress, privateKey);
 
@@ -31,7 +31,7 @@ export const DeployOZAccount = async (
     await provider.waitForTransaction(transaction_hash);
     console.log(
       "New OpenZeppelin account created.\n   address =",
-      contract_address
+      contract_address,
     );
     return JSON.stringify({
       status: "success",
@@ -64,13 +64,13 @@ export const DeployArgentAccount = async (params: DeployArgentParams) => {
       params.publicKeyAX,
       argentXaccountClassHash,
       AXConstructorCallData,
-      0
+      0,
     );
 
     const accountAX = new Account(
       provider,
       AXcontractAddress,
-      params.privateKeyAX
+      params.privateKeyAX,
     );
 
     const deployAccountPayload = {

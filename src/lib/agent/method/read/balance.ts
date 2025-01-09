@@ -1,6 +1,5 @@
-import { RPC_URL, tokenAddresses } from 'src/lib/constant';
-import { Account, Contract, RpcProvider } from 'starknet';
-
+import { RPC_URL, tokenAddresses } from "src/lib/constant";
+import { Account, Contract, RpcProvider } from "starknet";
 
 // Initialize provider
 const provider = new RpcProvider({ nodeUrl: RPC_URL });
@@ -10,11 +9,14 @@ export type GetOwnBalanceParams = {
 };
 
 const formatBalance = (rawBalance: string): string => {
-  const balancePadded = rawBalance.padStart(19, '0');
+  const balancePadded = rawBalance.padStart(19, "0");
   const decimalPosition = balancePadded.length - 18;
-  const formattedBalance = balancePadded.slice(0, decimalPosition) + '.' + balancePadded.slice(decimalPosition);
+  const formattedBalance =
+    balancePadded.slice(0, decimalPosition) +
+    "." +
+    balancePadded.slice(decimalPosition);
   return parseFloat(formattedBalance).toString();
-}
+};
 
 export const getOwnBalance = async (
   params: GetOwnBalanceParams,
@@ -24,7 +26,7 @@ export const getOwnBalance = async (
     const walletAddress = process.env.PUBLIC_ADDRESS;
     console.log(walletAddress);
     if (!walletAddress) {
-      throw new Error('Wallet address not configured');
+      throw new Error("Wallet address not configured");
     }
 
     // Account Instance
@@ -43,13 +45,13 @@ export const getOwnBalance = async (
     //const decimalBalance = formatBalance(rawBalance);
     console.log(balance.balance.toString());
     return JSON.stringify({
-      status: 'success',
+      status: "success",
       balance: balance.balance.toString(),
     });
   } catch (error) {
     return JSON.stringify({
-      status: 'failure',
-      error: error instanceof Error ? error.message : 'Unknown error',
+      status: "failure",
+      error: error instanceof Error ? error.message : "Unknown error",
     });
   }
 };
@@ -71,16 +73,16 @@ export const getBalance = async (params: GetBalanceParams) => {
     const balance = await tokenContract.balanceOf(params.walletAddress);
 
     const rawBalance = balance.balance.toString();
-    
+
     console.log(rawBalance);
     return JSON.stringify({
-      status: 'success',
+      status: "success",
       balance: balance.balance.toString(),
     });
   } catch (error) {
     return JSON.stringify({
-      status: 'failure',
-      error: error instanceof Error ? error.message : 'Unknown error',
+      status: "failure",
+      error: error instanceof Error ? error.message : "Unknown error",
     });
   }
 };
@@ -93,15 +95,15 @@ const erc20ABI = [
     inputs: [
       {
         name: "account",
-        type: "felt"
-      }
+        type: "felt",
+      },
     ],
     outputs: [
       {
         name: "balance",
-        type: "Uint256"
-      }
+        type: "Uint256",
+      },
     ],
-    stateMutability: "view"
-  }
+    stateMutability: "view",
+  },
 ];

@@ -12,7 +12,7 @@ import { allLeftOverExceptionFilter } from "./lib/global-filters/all";
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter()
+    new FastifyAdapter(),
   );
 
   app.useGlobalPipes(
@@ -21,12 +21,12 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
       transform: true,
       validateCustomDecorators: true,
-    })
+    }),
   );
 
   app.useGlobalFilters(
     new allLeftOverExceptionFilter(),
-    new HttpExceptionFilter()
+    new HttpExceptionFilter(),
   );
   app.use(helmet({ crossOriginResourcePolicy: false }));
   app.setGlobalPrefix("/api");

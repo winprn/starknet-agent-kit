@@ -18,7 +18,7 @@ export class StarknetAgent {
 
     if (!this.walletPrivateKey) {
       throw new Error(
-        "Starknet wallet private key is required https://www.argent.xyz/argent-x"
+        "Starknet wallet private key is required https://www.argent.xyz/argent-x",
       );
     }
 

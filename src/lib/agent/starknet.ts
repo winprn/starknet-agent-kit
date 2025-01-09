@@ -1,4 +1,4 @@
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
 
 //Getter for you starkent wallet private key
 export const get_starknet_private_key = (): string => {
