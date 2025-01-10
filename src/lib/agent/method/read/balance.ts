@@ -8,7 +8,7 @@ export type GetOwnBalanceParams = {
   symbol: string;
 };
 
-const formatBalance = (rawBalance: string): string => {
+/*const formatBalance = (rawBalance: string): string => {
   const balancePadded = rawBalance.padStart(19, "0");
   const decimalPosition = balancePadded.length - 18;
   const formattedBalance =
@@ -16,7 +16,7 @@ const formatBalance = (rawBalance: string): string => {
     "." +
     balancePadded.slice(decimalPosition);
   return parseFloat(formattedBalance).toString();
-};
+};*/
 
 export const getOwnBalance = async (
   params: GetOwnBalanceParams,

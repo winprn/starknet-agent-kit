@@ -1,6 +1,28 @@
 import { z } from "zod";
 
 // Schema definitions
+export const TransferERC20schema = z.object({
+  recipient_address : z 
+    .string()
+    .describe("The recipient public address"),
+  amount : z
+    .string()
+    .describe("The amount of erc20 token that will be send"),
+  symbol : z
+    .string()
+    .describe("The symbol of the erc20 token"),
+})
+
+export const DeployOZAccountSchema = z.object({
+  publicKey : z
+    .string()
+    .describe('The public key to deploy the OZ Account'),
+  privateKey : z
+    .string()
+    .describe('The private key to deploy the OZ Account'),
+});
+
+
 export const getOwnBalanceSchema = z.object({
   symbol: z
     .string()
