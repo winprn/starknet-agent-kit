@@ -15,6 +15,7 @@ import { getBlockTransactionCount } from "./method/read/rpc/getBlockTransactionC
 import { getStorageAt } from "./method/read/rpc/getStorageAt";
 import { getClassAt } from "./method/read/rpc/getClassAt";
 import { getClassHash } from "./method/read/rpc/getClassHash";
+import { getSpecVersion } from "./method/read/rpc/getSpecVersion";
 import {
   getClassAtSchema,
   getClassHashSchema,
@@ -110,5 +111,9 @@ export const createTools = (agent: StarknetAgentInterface) => [
     description:
       "Transfer from the caller only token ERC20 at a specific public address",
     schema: TransferERC20schema,
+  }),
+  tool(getSpecVersion, {
+    name: "get_spec_version",
+    description: "Get the Starknet node specification version",
   }),
 ];

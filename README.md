@@ -1,99 +1,141 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# starknet-agent-kit (alpha) <img src="https://pbs.twimg.com/profile_images/1834202903189618688/N4J8emeY_400x400.png" width="25">
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+[![NPM Version](https://img.shields.io/npm/v/starknet-agent-kit.svg)](https://www.npmjs.com/package/starknet-agent-kit)
+[![License](https://img.shields.io/npm/l/starknet-agent-kit.svg)](https://github.com/kasarlabs/starknet-agent-kit/blob/main/LICENSE)
+[![Downloads](https://img.shields.io/npm/dm/starknet-agent-kit.svg)](https://www.npmjs.com/package/starknet-agent-kit)
+[![GitHub Issues](https://img.shields.io/github/issues/kasarlabs/starknet-agent-kit.svg)](https://github.com/kasarlabs/starknet-agent-kit/issues)
+[![GitHub Stars](https://img.shields.io/github/stars/kasarlabs/starknet-agent-kit.svg)](https://github.com/kasarlabs/starknet-agent-kit/stargazers)
+[![Last Commit](https://img.shields.io/github/last-commit/kasarlabs/starknet-agent-kit.svg)](https://github.com/kasarlabs/starknet-agent-kit/commits/main)
+[![Node Version](https://img.shields.io/node/v/starknet-agent-kit.svg)](https://nodejs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
+[![Discord](https://img.shields.io/discord/1234567890)](https://discord.gg/yourdiscord)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+A NestJS-based toolkit for creating AI agents that can interact with the Starknet blockchain.
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
+## Getting Started
 
 ```bash
-$ pnpm install
+npm install @nestjs/common @nestjs/core @nestjs/platform-fastify starknet @langchain/anthropic
 ```
 
-## Compile and run the project
+You will need two things:
+- A Starknet wallet private key (you can get one from [Argent X](https://www.argent.xyz/argent-x))
+- An Anthropic API key
+
+### Basic Usage
+
+```typescript
+import { StarknetAgent } from 'starknet-agent-kit';
+
+const agent = new StarknetAgent({
+  anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+  walletPrivateKey: process.env.STARKNET_PRIVATE_KEY,
+});
+
+// Execute commands in natural language
+await agent.execute(
+  'Transfer 0.1 ETH to 0x123...'
+);
+
+// Get balance
+await agent.execute(
+  'What is my ETH balance?'
+);
+
+// Swap tokens
+await agent.execute(
+  'Swap 5 USDC for ETH'
+);
+
+// Create account
+await agent.execute(
+  'Create a new Argent account'
+);
+```
+
+## Features
+
+- Natural language interactions with Starknet blockchain
+- ERC20 token transfers
+- Token swaps using Avnu
+- Balance checking
+- Account creation (Argent & OpenZeppelin)
+- Account deployment
+- RPC interactions (getBlockNumber, getStorageAt, etc.)
+
+## Environment Variables
+
+Create a `.env` file with the following variables:
+
+```env
+STARKNET_PRIVATE_KEY=your_private_key
+PUBLIC_ADDRESS=your_public_address
+ANTHROPIC_API_KEY=your_anthropic_api_key
+RPC_URL=your_rpc_url
+```
+
+## Local Development
+
+1. Clone the repository:
+```bash
+git clone https://github.com/kasarlabs/starknet-agent-kit.git
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start the development server:
+```bash
+npm run start:dev
+```
+
+The API will be available at `http://localhost:3000/api`.
+
+## API Endpoints
+
+### POST /api/agent/request
+
+Make requests to the Starknet agent.
+
+Request body:
+```json
+{
+  "request": "Your natural language request here"
+}
+```
+
+Headers:
+```
+x-api-key: your_api_key
+```
+
+## Supported Tokens
+
+- ETH
+- USDC
+- USDT
+- STRK
+
+## Tools
+
+All Langchain tools are available to be imported and used directly:
+
+```typescript
+import { getBalance, TransferERC20, swapTokens } from 'starknet-agent-kit';
+```
+
+## Testing
+
+To run tests:
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+npm run test
 ```
 
-## Run tests
+For E2E tests:
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+npm run test:e2e
 ```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ pnpm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
