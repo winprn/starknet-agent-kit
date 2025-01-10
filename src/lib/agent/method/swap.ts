@@ -31,7 +31,7 @@ export const swapTokens = async (params: SwapParams, privateKey: string) => {
 
     const sellAmount = parseUnits(
       String(params.sellAmount),
-      symbolToDecimal(params.sellTokenSymbol)
+      symbolToDecimal(params.sellTokenSymbol),
     );
 
     const quoteParams: QuoteRequest = {
@@ -45,7 +45,6 @@ export const swapTokens = async (params: SwapParams, privateKey: string) => {
     const quotes = await fetchQuotes(quoteParams);
 
     const result = await executeSwap(account, quotes[0], {
-
       slippage: 0.1,
     });
 

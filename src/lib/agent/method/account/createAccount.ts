@@ -27,6 +27,7 @@ export const CreateOZAccount = async () => {
       wallet: "Open Zeppelin",
       new_account_publickey: OZcontractAddress,
       new_accout_privatekey: privateKey,
+      precalculate_address: OZcontractAddress,
     });
   } catch (error) {
     return JSON.stringify({
@@ -63,6 +64,7 @@ export const CreateArgentAccount = async () => {
       status: "success",
       new_account_publickey: AXcontractAddress,
       new_account_privatekey: privateKeyAX,
+      precalculate_address: AXcontractAddress,
       wallet: "Argent",
     });
   } catch (error) {

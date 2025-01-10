@@ -3,7 +3,10 @@ import {
   CreateOZAccount,
   CreateArgentAccount,
 } from "src/lib/agent/method/account/createAccount";
-import { DeployArgentAccount, DeployOZAccount } from "src/lib/agent/method/account/deployAccount";
+import {
+  DeployArgentAccount,
+  DeployOZAccount,
+} from "src/lib/agent/method/account/deployAccount";
 import { TransferERC20 } from "./method/erc20/TransferERC20";
 import { string, symbol, z } from "zod";
 import { getOwnBalance, getBalance } from "./method/read/balance";
@@ -36,7 +39,7 @@ type StarknetAgentInterface = {
  */
 const withWalletKey = <T>(
   fn: (params: T, privateKey: string) => Promise<any>,
-  agent: StarknetAgentInterface
+  agent: StarknetAgentInterface,
 ) => {
   return (params: T) => fn(params, agent.getCredentials().walletPrivateKey);
 };
@@ -58,10 +61,10 @@ export const createTools = (agent: StarknetAgentInterface) => [
     name: "CreateOZAccount",
     description: "Create Open Zeppelin account",
   }),
-  tool(DeployOZAccount,{
-    name : 'DeployOZ',
-    description : "Deploy a OZ Account",
-    schema : DeployOZAccountSchema,
+  tool(DeployOZAccount, {
+    name: "DeployOZ",
+    description: "Deploy a OZ Account",
+    schema: DeployOZAccountSchema,
   }),
   tool(CreateArgentAccount, {
     name: "CreateArgentAccount",
@@ -104,7 +107,8 @@ export const createTools = (agent: StarknetAgentInterface) => [
   }),
   tool(TransferERC20, {
     name: "transferERC20",
-    description : "Transfer from the caller only token ERC20 at a specific public address",
-    schema : TransferERC20schema,
-  })
+    description:
+      "Transfer from the caller only token ERC20 at a specific public address",
+    schema: TransferERC20schema,
+  }),
 ];
