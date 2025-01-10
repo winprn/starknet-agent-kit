@@ -58,23 +58,22 @@ await agent.execute("Create a new Argent account");
 
 ## Features
 
-- Natural language interactions with Starknet blockchain
-- ERC20 token transfers
-- Token swaps using Avnu
-- Balance checking
-- Account creation (Argent & OpenZeppelin)
-- Account deployment
-- RPC interactions (getBlockNumber, getStorageAt, etc.)
+- Retrieve account infos (Balance, public key, etc)
+- Create one or multiple accounts (Argent & OpenZeppelin)
+- Transfer assets between accounts
+- Play with DeFi (Swap on Avnu)
+- Play with dApps (Create a .stark domain)
+- All RPC read methods supported (getBlockNumber, getStorageAt, etc.)
 
 ## Environment Variables
 
 Create a `.env` file with the following variables:
 
 ```env
-STARKNET_PRIVATE_KEY=your_private_key
-PUBLIC_ADDRESS=your_public_address
-ANTHROPIC_API_KEY=your_anthropic_api_key
-RPC_URL=your_rpc_url
+  STARKNET_PRIVATE_KEY=your_private_key
+  PUBLIC_ADDRESS=your_public_address
+  ANTHROPIC_API_KEY=your_anthropic_api_key
+  RPC_URL=your_rpc_url
 ```
 
 ## Local Development
@@ -118,13 +117,6 @@ Headers:
 ```
 x-api-key: your_api_key
 ```
-
-## Supported Tokens
-
-- ETH
-- USDC
-- USDT
-- STRK
 
 ## Tools
 
