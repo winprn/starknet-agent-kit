@@ -3,8 +3,9 @@ import {
   CreateOZAccount,
   CreateArgentAccount,
 } from "src/lib/agent/method/account/createAccount";
-import { DeployArgentAccount } from "src/lib/agent/method/account/deployAccount";
-import { z } from "zod";
+import { DeployArgentAccount, DeployOZAccount } from "src/lib/agent/method/account/deployAccount";
+import { TransferERC20 } from "./method/erc20/TransferERC20";
+import { string, symbol, z } from "zod";
 import { getOwnBalance, getBalance } from "./method/read/balance";
 import { getBlockNumber } from "./method/read/rpc/getBlockNumber";
 import { getBlockTransactionCount } from "./method/read/rpc/getBlockTransactionCount";
@@ -53,6 +54,15 @@ const DeployArgentAccountSchema = z.object({
     .describe("The private key to deploy the Argent Account"),
 });
 
+const DeployOZAccountSchema = z.object({
+  publicKey : z
+    .string()
+    .describe('The public key to deploy the OZ Account'),
+  privateKey : z
+    .string()
+    .describe('The private key to deploy the OZ Account'),
+});
+
 const getStorageAtSchema = z.object({
   contractAddress: z
     .string()
@@ -70,6 +80,18 @@ const getBlockTransactionCountSchema = z.object({
     .optional()
     .describe("Block identifier (optional, defaults to 'latest')"),
 });
+
+const TransferERC20schema = z.object({
+  recipient_address : z 
+    .string()
+    .describe("The recipient public address"),
+  amount : z
+    .string()
+    .describe("The amount of erc20 token that will be send"),
+  symbol : z
+    .string()
+    .describe("The symbol of the erc20 token"),
+})
 
 const getClassAtSchema = z
   .object({
@@ -122,6 +144,11 @@ export const createTools = (agent: StarknetAgentInterface) => [
     name: "CreateOZAccount",
     description: "Create Open Zeppelin account",
   }),
+  tool(DeployOZAccount,{
+    name : 'DeployOZ',
+    description : "Deploy a OZ Account",
+    schema : DeployOZAccountSchema,
+  }),
   tool(CreateArgentAccount, {
     name: "CreateArgentAccount",
     description: "Create Account account",
@@ -155,4 +182,9 @@ export const createTools = (agent: StarknetAgentInterface) => [
     description: "Get the class hash for a contract at a specific address",
     schema: getClassHashSchema,
   }),
+  tool(TransferERC20, {
+    name: "transferERC20",
+    description : "Transfer from the caller only token ERC20 at a specific public address",
+    schema : TransferERC20schema,
+  })
 ];
