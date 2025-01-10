@@ -3,7 +3,9 @@ import {
   CreateOZAccount,
   CreateArgentAccount,
 } from "src/lib/agent/method/account/createAccount";
-import { DeployArgentAccount } from "src/lib/agent/method/account/deployAccount";
+import { DeployArgentAccount, DeployOZAccount } from "src/lib/agent/method/account/deployAccount";
+import { TransferERC20 } from "./method/erc20/TransferERC20";
+import { string, symbol, z } from "zod";
 import { getOwnBalance, getBalance } from "./method/read/balance";
 import { getBlockNumber } from "./method/read/rpc/getBlockNumber";
 import { getBlockTransactionCount } from "./method/read/rpc/getBlockTransactionCount";
@@ -19,6 +21,8 @@ import {
   getBlockTransactionCountSchema,
   getStorageAtSchema,
   swapSchema,
+  DeployOZAccountSchema,
+  TransferERC20schema,
 } from "./schema";
 import { swapTokens } from "./method/swap";
 
@@ -36,7 +40,6 @@ const withWalletKey = <T>(
 ) => {
   return (params: T) => fn(params, agent.getCredentials().walletPrivateKey);
 };
-
 /**
  * Creates and returns balance checking tools with injected agent credentials
  */
@@ -54,6 +57,11 @@ export const createTools = (agent: StarknetAgentInterface) => [
   tool(CreateOZAccount, {
     name: "CreateOZAccount",
     description: "Create Open Zeppelin account",
+  }),
+  tool(DeployOZAccount,{
+    name : 'DeployOZ',
+    description : "Deploy a OZ Account",
+    schema : DeployOZAccountSchema,
   }),
   tool(CreateArgentAccount, {
     name: "CreateArgentAccount",
@@ -94,4 +102,9 @@ export const createTools = (agent: StarknetAgentInterface) => [
       "Swap a specified amount of one token for another token. Always return the transaction hash if successful",
     schema: swapSchema,
   }),
+  tool(TransferERC20, {
+    name: "transferERC20",
+    description : "Transfer from the caller only token ERC20 at a specific public address",
+    schema : TransferERC20schema,
+  })
 ];

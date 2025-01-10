@@ -3,29 +3,31 @@ import { Account, RpcProvider, hash, CallData } from "starknet";
 
 const provider = new RpcProvider({ nodeUrl: RPC_URL });
 
-export const DeployOZAccount = async (
-  privateKey: string,
-  publicKey: string,
-) => {
+export type DeployOZAccountParams = {
+  publicKey: string;
+  privateKey: string;
+};
+
+export const DeployOZAccount = async (params : DeployOZAccountParams) => {
   try {
     const OZaccountClassHash =
       "0x061dac032f228abef9c6626f995015233097ae253a7f72d68552db02f2971b8f";
     const OZaccountConstructorCallData = CallData.compile({
-      publicKey: publicKey,
+      publicKey: params.publicKey,
     });
     const OZcontractAddress = hash.calculateContractAddressFromHash(
-      publicKey,
+      params.publicKey,
       OZaccountClassHash,
       OZaccountConstructorCallData,
       0,
     );
-    const OZaccount = new Account(provider, OZcontractAddress, privateKey);
+    const OZaccount = new Account(provider, OZcontractAddress, params.privateKey);
 
     const { transaction_hash, contract_address } =
       await OZaccount.deployAccount({
         classHash: OZaccountClassHash,
         constructorCalldata: OZaccountConstructorCallData,
-        addressSalt: publicKey,
+        addressSalt: params.publicKey,
       });
 
     await provider.waitForTransaction(transaction_hash);
