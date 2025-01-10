@@ -1,7 +1,4 @@
-import { RPC_URL } from "src/lib/constant";
-import { ec, stark, RpcProvider, hash, CallData } from "starknet";
-
-const provider = new RpcProvider({ nodeUrl: RPC_URL });
+import { ec, stark, hash, CallData } from "starknet";
 
 export const CreateOZAccount = async () => {
   try {
@@ -19,9 +16,8 @@ export const CreateOZAccount = async () => {
       starkKeyPub,
       OZaccountClassHash,
       OZaccountConstructorCallData,
-      0,
+      0
     );
-    console.log("Precalculated account address=", OZcontractAddress);
     return JSON.stringify({
       status: "success",
       wallet: "Open Zeppelin",
@@ -44,9 +40,7 @@ export const CreateArgentAccount = async () => {
 
     // Generate public and private key pair.
     const privateKeyAX = stark.randomAddress();
-    console.log("AX_ACCOUNT_PRIVATE_KEY=", privateKeyAX);
     const starkKeyPubAX = ec.starkCurve.getStarkKey(privateKeyAX);
-    console.log("AX_ACCOUNT_PUBLIC_KEY=", starkKeyPubAX);
 
     // Calculate future address of the ArgentX account
     const AXConstructorCallData = CallData.compile({
@@ -57,9 +51,8 @@ export const CreateArgentAccount = async () => {
       starkKeyPubAX,
       argentXaccountClassHash,
       AXConstructorCallData,
-      0,
+      0
     );
-    console.log("Precalculated account address=", AXcontractAddress);
     return JSON.stringify({
       status: "success",
       new_account_publickey: AXcontractAddress,

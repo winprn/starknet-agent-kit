@@ -1,12 +1,15 @@
+import { BlockIdParams } from "src/lib/agent/schema";
 import { rpcProvider } from "src/lib/agent/starknetAgent";
 
-export const getBlockNumber = async () => {
+export const getBlockStateUpdate = async (
+  params?: BlockIdParams
+) => {
   try {
-    const blockNumber = await rpcProvider.getBlockNumber();
-
+    const { blockId } = params;
+    const block = await rpcProvider.getBlockStateUpdate(blockId);
     return JSON.stringify({
       status: "success",
-      blockNumber,
+      block,
     });
   } catch (error) {
     return JSON.stringify({
