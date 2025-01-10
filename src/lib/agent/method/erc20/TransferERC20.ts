@@ -1,6 +1,7 @@
 import { RPC_URL, tokenAddresses} from "src/lib/constant";
 import { ec, RpcProvider, hash, CallData,Provider,Account,TransactionFinalityStatus, Contract,cairo,Uint256,uint256} from "starknet";
 import { config } from 'dotenv';
+import { symbol } from "zod";
 
 config()
 
@@ -53,17 +54,20 @@ export const TransferERC20 = async (
 
         const account = new Account(provider, accountAddress, privateKey);
         //Need more test for being sure 
-        // const amount = params.amount; // ex: "0.0001"
-        // const decimals = 18;
-        // const [whole, fraction = ""] = amount.split(".");
-        // const paddedFraction = fraction.padEnd(decimals, "0");
-        // const amountInWei = whole + paddedFraction;
+        const amount = params.amount; // ex: "0.0001"
+        const decimals = 18;
+        const [whole, fraction = ""] = amount.split(".");
+        const paddedFraction = fraction.padEnd(decimals, "0");
+        const amountInWei = whole + paddedFraction;
 
-        const amountUint256 = uint256.bnToUint256(100000000000000000);
-        //console.log("amount in wei" + amountUint256.low + amountUint256.high + "amount" + {amount})
+        const tokenAddress = tokenAddresses[params.symbol];
+        if (!tokenAddress) {
+            throw new Error(`Token ${params.symbol} not supported`);
+        }   
+        const amountUint256 = uint256.bnToUint256(amountInWei);
         const result = await account.execute(
             {
-                contractAddress: "0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d",
+                contractAddress: tokenAddress,
                 entrypoint: "transfer",
                 calldata: [
                     params.recipient_address,
@@ -76,6 +80,13 @@ export const TransferERC20 = async (
         console.log("Transfer transaction hash:", result.transaction_hash);
         
      await provider.waitForTransaction(result.transaction_hash);
+     return JSON.stringify({
+        status: "success",
+        amount : params.amount,
+        symbol : params.symbol,
+        recipients_address : params.recipient_address,
+        transaction_hash: result.transaction_hash,
+      });
     } catch (error) {
 
         console.error("Erreur détaillée:", error);
