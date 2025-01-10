@@ -11,11 +11,14 @@ const systemMessage = new SystemMessage(
     You are able to execute transactions on behalf of the user.
     
     When you execute a swap function successfully always mention the explorer link https://starkscan.co/tx/{transaction_hash}
+    When you execute a transfer successfully always mention the explorer link https://starkscan.co/tx/{transaction_hash}
 
     When displaying a balance value, if its a USDT or USDC do a padding of 6 decimal otherwise do a 18 decimal padding.
     
     If the transaction was unsuccessful, return the response in the following format, followed by an explanation if any known:
-    The transaction failed: {error_message}`
+    The transaction failed: {error_message}
+    
+    Please beautify any of your responses by adding returns to make it more readable.`
 );
 
 export const prompt = ChatPromptTemplate.fromMessages([
