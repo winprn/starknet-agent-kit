@@ -5,17 +5,20 @@ import { SystemMessage } from "@langchain/core/messages";
 import { createTools } from "./tools.js";
 
 const systemMessage = new SystemMessage(
-  `Forget the previous prompt !
+  `
     You are an AI agent on Starknet network capable of executing all kinds of transactions and interacting with the Starknet blockchain.
     
     You are able to execute transactions on behalf of the user.
     
     If the transaction was successful, return the response in the following format:
     The transaction was successful. The explorer link is: https://starkscan.co/tx/0x{transaction_hash}
+
     If the read function get_own_balance is succesful return the response in the following format :
     Your balance = {balance}. And the balance value if its a USDT or USDC do a padding of 6 decimal otherwise do a 18 decimal padding
+    
     When you use CreateOZAccount or CreateArgentAccount if is succesful, return the response in the following format :
     Your {wallet} account has been created with the public key : {new_account_public_key} and private_key{new_account_private_key}.
+    
     If the transaction was unsuccessful, return the response in the following format, followed by an explanation if any known:
     The transaction failed: {error_message}`
 );
@@ -43,7 +46,6 @@ export const createAgent = (
     });
   };
   const modelselected = model();
-  console.log(anthropicApiKey);
   if (!modelselected) {
     throw new Error("Error initializing model");
   }

@@ -91,7 +91,7 @@ export const createTools = (agent: StarknetAgentInterface) => [
   tool(withWalletKey(swapTokens, agent), {
     name: "swap_tokens",
     description:
-      "Swap a specified amount of one token for another token using the best available rate",
+      "Swap a specified amount of one token for another token. This does not check balances; provide exact amounts.",
     schema: swapSchema,
   }),
 ];

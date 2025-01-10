@@ -3,6 +3,7 @@ import { executeSwap, fetchQuotes, QuoteRequest } from "@avnu/avnu-sdk";
 import { tokenAddresses } from "src/lib/constant";
 import { parseUnits } from "ethers";
 import { rpcProvider } from "../starknetAgent";
+import { symbolToDecimal } from "src/lib/utils/symbolToDecimal";
 
 export type SwapParams = {
   sellTokenSymbol: string;
@@ -11,7 +12,6 @@ export type SwapParams = {
 };
 
 export const swapTokens = async (params: SwapParams, privateKey: string) => {
-  console.log({ params });
   try {
     const walletAddress = process.env.PUBLIC_ADDRESS;
 
@@ -29,17 +29,22 @@ export const swapTokens = async (params: SwapParams, privateKey: string) => {
       throw new Error(`Token ${params.buyTokenSymbol} not supported`);
     }
 
+    const sellAmount = parseUnits(String(params.sellAmount), symbolToDecimal(params.sellTokenSymbol));
+
     const quoteParams: QuoteRequest = {
       sellTokenAddress,
       buyTokenAddress,
-      sellAmount: parseUnits(String(params.sellAmount), 18),
+      sellAmount,
       takerAddress: account.address,
       size: 1,
     };
 
     const quotes = await fetchQuotes(quoteParams);
 
-    const result = await executeSwap(account, quotes[0], {});
+    const result = await executeSwap(account, quotes[0], {
+      executeApprove: true,
+      slippage: 0.1,
+    });
 
     return JSON.stringify({
       status: "success",
