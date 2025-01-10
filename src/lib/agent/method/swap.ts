@@ -1,4 +1,4 @@
-import { Account } from "starknet";
+import { Account, transaction } from "starknet";
 import { executeSwap, fetchQuotes, QuoteRequest } from "@avnu/avnu-sdk";
 import { tokenAddresses } from "src/lib/constant";
 import { parseUnits } from "ethers";
@@ -52,6 +52,7 @@ export const swapTokens = async (params: SwapParams, privateKey: string) => {
     return JSON.stringify({
       status: "success",
       message: `The swap was successful. You swapped ${params.sellAmount} ${params.sellTokenSymbol} for ${params.buyTokenSymbol}.`,
+      transactionHash: result.transactionHash,
     });
   } catch (error) {
     console.log({ error });
