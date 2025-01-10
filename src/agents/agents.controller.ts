@@ -1,6 +1,6 @@
 import { Body, Controller, OnModuleInit, Post } from "@nestjs/common";
 import { AgentRequestDTO } from "./dto/agents";
-import { StarknetAgent } from "src/lib/agent/Starknet-Agent-Kit";
+import { StarknetAgent } from "src/lib/agent/starknetAgent";
 import { AgentsService } from "./agents.service";
 
 @Controller("agent")

@@ -1,6 +1,10 @@
 import type { AgentExecutor } from "langchain/agents";
 import { getOwnBalance, GetOwnBalanceParams } from "./method/read/balance.js";
 import { createAgent } from "./agent.js";
+import { RpcProvider } from "starknet";
+import { RPC_URL } from "../constant.js";
+
+export const rpcProvider = new RpcProvider({ nodeUrl: RPC_URL });
 
 export interface StarknetAgentConfig {
   walletPrivateKey: string;
@@ -18,7 +22,7 @@ export class StarknetAgent {
 
     if (!this.walletPrivateKey) {
       throw new Error(
-        "Starknet wallet private key is required https://www.argent.xyz/argent-x",
+        "Starknet wallet private key is required https://www.argent.xyz/argent-x"
       );
     }
 
