@@ -8,7 +8,7 @@ export type DeployOZAccountParams = {
   privateKey: string;
 };
 
-export const DeployOZAccount = async (params : DeployOZAccountParams) => {
+export const DeployOZAccount = async (params: DeployOZAccountParams) => {
   try {
     const OZaccountClassHash =
       "0x061dac032f228abef9c6626f995015233097ae253a7f72d68552db02f2971b8f";
@@ -21,7 +21,11 @@ export const DeployOZAccount = async (params : DeployOZAccountParams) => {
       OZaccountConstructorCallData,
       0,
     );
-    const OZaccount = new Account(provider, OZcontractAddress, params.privateKey);
+    const OZaccount = new Account(
+      provider,
+      OZcontractAddress,
+      params.privateKey,
+    );
 
     const { transaction_hash, contract_address } =
       await OZaccount.deployAccount({
