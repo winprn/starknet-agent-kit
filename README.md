@@ -20,6 +20,8 @@
 
 A NestJS-based toolkit for creating AI agents that can interact with the Starknet blockchain.
 
+> ⚠️ **Warning**: This kit is currently under development. Please note that sharing sensitive information (private keys, personal data, etc.) with AI models involves inherent security risks.
+
 ## Getting Started
 
 ```bash
