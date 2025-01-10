@@ -1,14 +1,22 @@
-# starknet-agent-kit (alpha) <img src="https://pbs.twimg.com/profile_images/1834202903189618688/N4J8emeY_400x400.png" width="25">
+<h1 align="center">
+  <img src="https://pbs.twimg.com/profile_images/1834202903189618688/N4J8emeY_400x400.png" width="40"><br>
+  starknet-agent-kit (alpha)
+</h1>
 
-[![NPM Version](https://img.shields.io/npm/v/starknet-agent-kit.svg)](https://www.npmjs.com/package/starknet-agent-kit)
-[![License](https://img.shields.io/npm/l/starknet-agent-kit.svg)](https://github.com/kasarlabs/starknet-agent-kit/blob/main/LICENSE)
-[![Downloads](https://img.shields.io/npm/dm/starknet-agent-kit.svg)](https://www.npmjs.com/package/starknet-agent-kit)
-[![GitHub Issues](https://img.shields.io/github/issues/kasarlabs/starknet-agent-kit.svg)](https://github.com/kasarlabs/starknet-agent-kit/issues)
-[![GitHub Stars](https://img.shields.io/github/stars/kasarlabs/starknet-agent-kit.svg)](https://github.com/kasarlabs/starknet-agent-kit/stargazers)
-[![Last Commit](https://img.shields.io/github/last-commit/kasarlabs/starknet-agent-kit.svg)](https://github.com/kasarlabs/starknet-agent-kit/commits/main)
-[![Node Version](https://img.shields.io/node/v/starknet-agent-kit.svg)](https://nodejs.org)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
-[![Discord](https://img.shields.io/discord/1234567890)](https://discord.gg/yourdiscord)
+<p align="center">
+  <a href="https://www.npmjs.com/package/starknet-agent-kit">
+    <img src="https://img.shields.io/npm/v/starknet-agent-kit.svg" alt="NPM Version" />
+  </a>
+  <a href="https://github.com/kasarlabs/starknet-agent-kit/blob/main/LICENSE">
+    <img src="https://img.shields.io/npm/l/starknet-agent-kit.svg" alt="License" />
+  </a>
+  <a href="https://github.com/kasarlabs/starknet-agent-kit/stargazers">
+    <img src="https://img.shields.io/github/stars/kasarlabs/starknet-agent-kit.svg" alt="GitHub Stars" />
+  </a>
+  <a href="https://nodejs.org">
+    <img src="https://img.shields.io/node/v/starknet-agent-kit.svg" alt="Node Version" />
+  </a>
+</p>
 
 A NestJS-based toolkit for creating AI agents that can interact with the Starknet blockchain.
 
@@ -78,7 +86,7 @@ RPC_URL=your_rpc_url
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/kasarlabs/starknet-agent-kit.git
+git clone https://github.com/yourusername/starknet-agent-kit.git
 ```
 
 2. Install dependencies:
