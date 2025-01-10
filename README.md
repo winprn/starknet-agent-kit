@@ -29,13 +29,14 @@ npm install @nestjs/common @nestjs/core @nestjs/platform-fastify starknet @langc
 ```
 
 You will need two things:
+
 - A Starknet wallet private key (you can get one from [Argent X](https://www.argent.xyz/argent-x))
 - An Anthropic API key
 
 ### Basic Usage
 
 ```typescript
-import { StarknetAgent } from 'starknet-agent-kit';
+import { StarknetAgent } from "starknet-agent-kit";
 
 const agent = new StarknetAgent({
   anthropicApiKey: process.env.ANTHROPIC_API_KEY,
@@ -43,24 +44,16 @@ const agent = new StarknetAgent({
 });
 
 // Execute commands in natural language
-await agent.execute(
-  'Transfer 0.1 ETH to 0x123...'
-);
+await agent.execute("Transfer 0.1 ETH to 0x123...");
 
 // Get balance
-await agent.execute(
-  'What is my ETH balance?'
-);
+await agent.execute("What is my ETH balance?");
 
 // Swap tokens
-await agent.execute(
-  'Swap 5 USDC for ETH'
-);
+await agent.execute("Swap 5 USDC for ETH");
 
 // Create account
-await agent.execute(
-  'Create a new Argent account'
-);
+await agent.execute("Create a new Argent account");
 ```
 
 ## Features
@@ -87,16 +80,19 @@ RPC_URL=your_rpc_url
 ## Local Development
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/yourusername/starknet-agent-kit.git
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Start the development server:
+
 ```bash
 npm run start:dev
 ```
@@ -110,6 +106,7 @@ The API will be available at `http://localhost:3000/api`.
 Make requests to the Starknet agent.
 
 Request body:
+
 ```json
 {
   "request": "Your natural language request here"
@@ -117,6 +114,7 @@ Request body:
 ```
 
 Headers:
+
 ```
 x-api-key: your_api_key
 ```
@@ -133,7 +131,7 @@ x-api-key: your_api_key
 All Langchain tools are available to be imported and used directly:
 
 ```typescript
-import { getBalance, TransferERC20, swapTokens } from 'starknet-agent-kit';
+import { getBalance, TransferERC20, swapTokens } from "starknet-agent-kit";
 ```
 
 ## Testing
