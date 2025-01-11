@@ -14,7 +14,6 @@ import { getBlockTransactionCount } from "./method/rpc/getBlockTransactionCount"
 import { getStorageAt } from "./method/rpc/getStorageAt";
 import { getClassAt } from "./method/rpc/getClassAt";
 import { getClassHashAt } from "./method/rpc/getClassHash";
-import { getSpecVersion } from "./method/rpc/getSpecVersion";
 import {
   getOwnBalanceSchema,
   getBalanceSchema,
@@ -29,6 +28,7 @@ import {
   blockIdAndContractAddressSchema,
 } from "./schema";
 import { swapTokens } from "./method/swap";
+import { getSpecVersion } from "./method/rpc/getSpecVersion";
 import { getBlockWithTxHashes } from "./method/rpc/getBlockWithTxHashes";
 import { getBlockWithTxs } from "./method/rpc/getBlockWithTxs";
 import { getBlockWithReceipts } from "./method/rpc/getBlockWithReceipts";
@@ -44,6 +44,7 @@ import { getSyncingStats } from "./method/rpc/getSyncingStats";
 import { getNonceForAddress } from "./method/rpc/getNonceForAddress";
 import { getTransactionTrace } from "./method/rpc/getTransactionTrace";
 import { getBlockTransactionsTraces } from "./method/rpc/getBlockTransactionsTraces";
+import { getAddress } from "./method/account/getAddress";
 
 // Types
 type StarknetAgentInterface = {
@@ -220,4 +221,8 @@ export const createTools = (agent: StarknetAgentInterface) => [
       "Retrieve execution traces for all transactions in a specified block, including detailed insights into their execution.",
     schema: blockIdSchema,
   }),
+  tool(getAddress, {
+      name: "get_address",
+      description: "Returns the public (current) account address from your .env config"
+   }),
 ];

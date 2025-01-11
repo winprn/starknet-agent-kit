@@ -1,7 +1,9 @@
 import { BlockIdParams } from "src/lib/agent/schema";
 import { rpcProvider } from "src/lib/agent/starknetAgent";
 
-export const getBlockWithTxHashes = async (params: BlockIdParams) => {
+export const getBlockWithTxHashes = async (
+  params: BlockIdParams
+) => {
   try {
     const blockId = params?.blockId ?? "latest";
     const block = await rpcProvider.getBlockWithTxHashes(blockId);

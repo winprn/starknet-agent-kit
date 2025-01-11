@@ -1,7 +1,9 @@
 import { BlockIdParams } from "src/lib/agent/schema";
 import { rpcProvider } from "src/lib/agent/starknetAgent";
 
-export const getBlockWithReceipts = async (params: BlockIdParams) => {
+export const getBlockWithReceipts = async (
+  params: BlockIdParams
+) => {
   try {
     const blockId = params?.blockId ?? "latest";
     const block = await rpcProvider.getBlockWithReceipts(blockId);
