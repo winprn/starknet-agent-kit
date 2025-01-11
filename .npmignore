@@ -10,3 +10,4 @@ coverage/
 .github/
 .vscode/
 *.log
+*.tgz
