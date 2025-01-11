@@ -1,22 +1,21 @@
-import { RPC_URL, tokenAddresses } from "src/lib/constant";
-import { Account, Contract, RpcProvider } from "starknet";
+// src/lib/agent/method/read/balance.ts
 
-// Initialize provider
-const provider = new RpcProvider({ nodeUrl: RPC_URL });
+import { tokenAddresses } from "src/lib/constant";
+import { StarknetAgent } from "../../starknetAgent";
+
+const ERC20_ABI = [
+  {
+    name: "balanceOf",
+    type: "function",
+    inputs: [{ name: "account", type: "felt" }],
+    outputs: [{ name: "balance", type: "Uint256" }],
+    stateMutability: "view",
+  },
+];
 
 export type GetOwnBalanceParams = {
   symbol: string;
 };
-
-/*const formatBalance = (rawBalance: string): string => {
-  const balancePadded = rawBalance.padStart(19, "0");
-  const decimalPosition = balancePadded.length - 18;
-  const formattedBalance =
-    balancePadded.slice(0, decimalPosition) +
-    "." +
-    balancePadded.slice(decimalPosition);
-  return parseFloat(formattedBalance).toString();
-};*/
 
 export const getOwnBalance = async (
   params: GetOwnBalanceParams,
@@ -24,29 +23,46 @@ export const getOwnBalance = async (
 ) => {
   try {
     const walletAddress = process.env.PUBLIC_ADDRESS;
-    console.log(walletAddress);
     if (!walletAddress) {
       throw new Error("Wallet address not configured");
     }
 
-    // Account Instance
-    const account = new Account(provider, walletAddress, privateKey);
+    const agent = new StarknetAgent({
+      walletPrivateKey: privateKey,
+      anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+    });
 
     const tokenAddress = tokenAddresses[params.symbol];
     if (!tokenAddress) {
       throw new Error(`Token ${params.symbol} not supported`);
     }
 
-    const tokenContract = new Contract(erc20ABI, tokenAddress, provider);
-    console.log(tokenContract);
+    // Create contract instance
+    const contract = agent.contractInteractor.createContract(
+      ERC20_ABI,
+      tokenAddress,
+    );
 
-    const balance = await tokenContract.balanceOf(account.address);
+    // Read balance
+    const result = await agent.contractInteractor.readContract(
+      contract,
+      "balanceOf",
+      [walletAddress],
+    );
 
-    //const decimalBalance = formatBalance(rawBalance);
-    console.log(balance.balance.toString());
+    // Parse the amount
+    const decimals =
+      params.symbol === "USDC" || params.symbol === "USDT" ? 6 : 18;
+    const parsedBalance = agent.contractInteractor.parseTokenAmount(
+      result.balance.toString(),
+      decimals,
+    );
+
     return JSON.stringify({
       status: "success",
-      balance: balance.balance.toString(),
+      balance: parsedBalance,
+      raw_balance: result.balance.toString(),
+      decimals: decimals,
     });
   } catch (error) {
     return JSON.stringify({
@@ -63,21 +79,42 @@ export type GetBalanceParams = {
 
 export const getBalance = async (params: GetBalanceParams) => {
   try {
+    const agent = new StarknetAgent({
+      walletPrivateKey: process.env.STARKNET_PRIVATE_KEY,
+      anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+    });
+
     const tokenAddress = tokenAddresses[params.assetSymbol];
     if (!tokenAddress) {
       throw new Error(`Token ${params.assetSymbol} not supported`);
     }
 
-    const tokenContract = new Contract(erc20ABI, tokenAddress, provider);
+    // Create contract instance
+    const contract = agent.contractInteractor.createContract(
+      ERC20_ABI,
+      tokenAddress,
+    );
 
-    const balance = await tokenContract.balanceOf(params.walletAddress);
+    // Read balance
+    const result = await agent.contractInteractor.readContract(
+      contract,
+      "balanceOf",
+      [params.walletAddress],
+    );
 
-    const rawBalance = balance.balance.toString();
+    // Parse the amount
+    const decimals =
+      params.assetSymbol === "USDC" || params.assetSymbol === "USDT" ? 6 : 18;
+    const parsedBalance = agent.contractInteractor.parseTokenAmount(
+      result.balance.toString(),
+      decimals,
+    );
 
-    console.log(rawBalance);
     return JSON.stringify({
       status: "success",
-      balance: balance.balance.toString(),
+      balance: parsedBalance,
+      raw_balance: result.balance.toString(),
+      decimals: decimals,
     });
   } catch (error) {
     return JSON.stringify({
@@ -86,24 +123,3 @@ export const getBalance = async (params: GetBalanceParams) => {
     });
   }
 };
-
-// Basic ERC20 ABI for balanceOf
-const erc20ABI = [
-  {
-    name: "balanceOf",
-    type: "function",
-    inputs: [
-      {
-        name: "account",
-        type: "felt",
-      },
-    ],
-    outputs: [
-      {
-        name: "balance",
-        type: "Uint256",
-      },
-    ],
-    stateMutability: "view",
-  },
-];
