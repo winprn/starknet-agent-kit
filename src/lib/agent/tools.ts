@@ -7,7 +7,7 @@ import {
   DeployArgentAccount,
   DeployOZAccount,
 } from "src/lib/agent/method/account/deployAccount";
-import { TransferERC20 } from "./method/erc20/TransferERC20";
+import { transfer } from "./method/token/transfer";
 import { getOwnBalance, getBalance } from "./method/read/balance";
 import { getBlockNumber } from "./method/rpc/getBlockNumber";
 import { getBlockTransactionCount } from "./method/rpc/getBlockTransactionCount";
@@ -21,12 +21,17 @@ import {
   getStorageAtSchema,
   swapSchema,
   DeployOZAccountSchema,
-  TransferERC20schema,
+  Transferschema,
   blockIdSchema,
   getTransactionByBlockIdAndIndexSchema,
   transactionHashSchema,
   blockIdAndContractAddressSchema,
-} from "./schema";
+  declareContractSchema,
+  estimateAccountDeployFeeSchema,
+  signMessageSchema,
+  verifyMessageSchema,
+  simulateTransactionSchema
+} from './schema';
 import { swapTokens } from "./method/swap";
 import { getSpecVersion } from "./method/rpc/getSpecVersion";
 import { getBlockWithTxHashes } from "./method/rpc/getBlockWithTxHashes";
@@ -45,6 +50,11 @@ import { getNonceForAddress } from "./method/rpc/getNonceForAddress";
 import { getTransactionTrace } from "./method/rpc/getTransactionTrace";
 import { getBlockTransactionsTraces } from "./method/rpc/getBlockTransactionsTraces";
 import { getAddress } from "./method/account/getAddress";
+import { declareContract } from "./method/contract/declareContract";
+import { estimateAccountDeployFee } from "./method/account/estimateAccountDeployFee";
+import { signMessage } from "./method/account/signMessage";
+import { verifyMessage } from "./method/account/verifyMessage";
+import { simulateTransaction } from "./method/transaction/simulateTransaction";
 
 // Types
 type StarknetAgentInterface = {
@@ -130,11 +140,11 @@ export const createTools = (agent: StarknetAgentInterface) => [
       "Swap a specified amount of one token for another token. Always return the transaction hash if successful",
     schema: swapSchema,
   }),
-  tool(TransferERC20, {
-    name: "transferERC20",
+  tool(transfer, {
+    name: "transfer",
     description:
-      "Transfer from the caller only token ERC20 at a specific public address",
-    schema: TransferERC20schema,
+      "transfer from the caller only token ERC20 at a specific public address",
+    schema: Transferschema,
   }),
   tool(getSpecVersion, {
     name: "get_spec_version",
@@ -225,4 +235,33 @@ export const createTools = (agent: StarknetAgentInterface) => [
       name: "get_address",
       description: "Returns the public (current) account address from your .env config"
    }),
+   tool(withWalletKey(declareContract, agent), {
+    name: "declare_contract",
+    description: "Declare a new contract on Starknet",
+    schema: declareContractSchema
+  }),
+
+  tool(withWalletKey(estimateAccountDeployFee, agent), {
+    name: "estimate_account_deploy_fee",
+    description: "Estimate the fee required to deploy an account",
+    schema: estimateAccountDeployFeeSchema
+  }),
+
+  tool(withWalletKey(signMessage, agent), {
+    name: "sign_message", 
+    description: "Sign a typed data message",
+    schema: signMessageSchema
+  }),
+
+  tool(verifyMessage, {
+    name: "verify_message",
+    description: "Verify a signed message",
+    schema: verifyMessageSchema
+  }),
+
+  tool(withWalletKey(simulateTransaction, agent), {
+    name: "simulate_transaction",
+    description: "Simulate a transaction without executing it",
+    schema: simulateTransactionSchema
+  })
 ];
