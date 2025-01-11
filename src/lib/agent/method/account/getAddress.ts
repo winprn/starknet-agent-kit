@@ -6,7 +6,7 @@ export const getAddress = async () => {
 
     if (!accountAddress) {
       throw new Error(
-        "No public address found. Please set PUBLIC_ADDRESS in your .env file!"
+        "No public address found. Please set PUBLIC_ADDRESS in your .env file!",
       );
     }
 

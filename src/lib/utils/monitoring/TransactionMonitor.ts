@@ -1,7 +1,4 @@
-import {
-  TransactionReceipt,
-  TransactionStatus,
-} from "starknet";
+import { TransactionReceipt, TransactionStatus } from "starknet";
 import { BaseUtilityClass } from "../types";
 
 export class TransactionMonitor implements BaseUtilityClass {

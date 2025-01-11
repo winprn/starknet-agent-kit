@@ -1,6 +1,6 @@
 // method/contract/declareContract.ts
-import { Contract, Account, CompiledContract } from 'starknet';
-import { rpcProvider } from '../../starknetAgent';
+import { Contract, Account, CompiledContract } from "starknet";
+import { rpcProvider } from "../../starknetAgent";
 
 export type DeclareContractParams = {
   contract: CompiledContract;
@@ -8,7 +8,10 @@ export type DeclareContractParams = {
   compiledClassHash?: string;
 };
 
-export const declareContract = async (params: DeclareContractParams, privateKey: string) => {
+export const declareContract = async (
+  params: DeclareContractParams,
+  privateKey: string,
+) => {
   try {
     const accountAddress = process.env.PUBLIC_ADDRESS;
     if (!accountAddress) {
@@ -16,26 +19,26 @@ export const declareContract = async (params: DeclareContractParams, privateKey:
     }
 
     const { contract, classHash, compiledClassHash } = params;
-    
+
     const account = new Account(rpcProvider, accountAddress, privateKey);
-    
+
     const declareResponse = await account.declare({
       contract,
       classHash,
-      compiledClassHash
+      compiledClassHash,
     });
 
     await rpcProvider.waitForTransaction(declareResponse.transaction_hash);
 
     return JSON.stringify({
-      status: "success", 
+      status: "success",
       transactionHash: declareResponse.transaction_hash,
-      classHash: declareResponse.class_hash
+      classHash: declareResponse.class_hash,
     });
   } catch (error) {
     return JSON.stringify({
       status: "failure",
-      error: error instanceof Error ? error.message : "Unknown error" 
+      error: error instanceof Error ? error.message : "Unknown error",
     });
   }
 };

@@ -1,11 +1,11 @@
 import { RPC_URL } from "src/lib/constant";
-import { 
-  Account, 
-  RpcProvider, 
-  hash, 
-  CallData, 
-  constants, 
-  TransactionFinalityStatus 
+import {
+  Account,
+  RpcProvider,
+  hash,
+  CallData,
+  constants,
+  TransactionFinalityStatus,
 } from "starknet";
 import { StarknetAgent } from "../../starknetAgent";
 import { AccountDetails } from "src/lib/utils/types";
@@ -32,11 +32,13 @@ export const DeployOZAccount = async (params: DeployOZAccountParams) => {
     };
 
     // Calculate deployment fee with max fee estimation
-    const { suggestedMaxFee } = await agent.accountManager.estimateAccountDeployFee(accountDetails);
+    const { suggestedMaxFee } =
+      await agent.accountManager.estimateAccountDeployFee(accountDetails);
     console.log("Estimated max deployment fee:", suggestedMaxFee);
 
     // Deploy the account with the estimated fee
-    const deployResponse = await agent.accountManager.deployAccount(accountDetails);
+    const deployResponse =
+      await agent.accountManager.deployAccount(accountDetails);
 
     if (!deployResponse.transactionHash) {
       throw new Error("No transaction hash returned from deployment");
@@ -45,10 +47,10 @@ export const DeployOZAccount = async (params: DeployOZAccountParams) => {
     // Wait for transaction confirmation
     const receipt = await provider.waitForTransaction(
       deployResponse.transactionHash,
-      { 
-        retryInterval: 5000, 
-        successStates: [TransactionFinalityStatus.ACCEPTED_ON_L1] 
-      }
+      {
+        retryInterval: 5000,
+        successStates: [TransactionFinalityStatus.ACCEPTED_ON_L1],
+      },
     );
 
     return {
@@ -73,12 +75,13 @@ export type DeployArgentParams = {
 export const DeployArgentAccount = async (params: DeployArgentParams) => {
   try {
     // Use a specific class hash for Argent account
-    const argentXaccountClassHash = "0x1a736d6ed154502257f02b1ccdf4d9d1089f80811cd6acad48e6b6a9d1f2003";
-    
+    const argentXaccountClassHash =
+      "0x1a736d6ed154502257f02b1ccdf4d9d1089f80811cd6acad48e6b6a9d1f2003";
+
     // Prepare constructor calldata
     const constructorCalldata = CallData.compile({
       owner: params.publicKeyAX,
-      guardian: "0x0" // Use hex string for consistency
+      guardian: "0x0", // Use hex string for consistency
     });
 
     // Calculate the contract address
@@ -86,15 +89,11 @@ export const DeployArgentAccount = async (params: DeployArgentParams) => {
       params.publicKeyAX,
       argentXaccountClassHash,
       constructorCalldata,
-      0
+      0,
     );
 
     // Create account instance
-    const account = new Account(
-      provider,
-      contractAddress,
-      params.privateKeyAX
-    );
+    const account = new Account(provider, contractAddress, params.privateKeyAX);
 
     // Prepare deployment payload
     const deployAccountPayload = {
@@ -105,21 +104,20 @@ export const DeployArgentAccount = async (params: DeployArgentParams) => {
     };
 
     // Deploy the account
-    const { transaction_hash, contract_address } = await account.deployAccount(
-      deployAccountPayload
-    );
+    const { transaction_hash, contract_address } =
+      await account.deployAccount(deployAccountPayload);
 
     // Wait for deployment confirmation
     await provider.waitForTransaction(transaction_hash, {
       retryInterval: 5000,
-      successStates: [TransactionFinalityStatus.ACCEPTED_ON_L1]
+      successStates: [TransactionFinalityStatus.ACCEPTED_ON_L1],
     });
 
     return {
       status: "success",
       wallet: "Argent X",
       transaction_hash,
-      contract_address
+      contract_address,
     };
   } catch (error) {
     return {

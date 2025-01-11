@@ -1,5 +1,5 @@
-import { Account, EstimateFee, constants } from 'starknet';
-import { rpcProvider } from '../../starknetAgent';
+import { Account, EstimateFee, constants } from "starknet";
+import { rpcProvider } from "../../starknetAgent";
 
 export type EstimateAccountDeployFeeParams = {
   classHash: string;
@@ -7,7 +7,10 @@ export type EstimateAccountDeployFeeParams = {
   addressSalt?: string;
 };
 
-export const estimateAccountDeployFee = async (params: EstimateAccountDeployFeeParams, privateKey: string) => {
+export const estimateAccountDeployFee = async (
+  params: EstimateAccountDeployFeeParams,
+  privateKey: string,
+) => {
   try {
     const accountAddress = process.env.PUBLIC_ADDRESS;
     if (!accountAddress) {
@@ -20,7 +23,7 @@ export const estimateAccountDeployFee = async (params: EstimateAccountDeployFeeP
     const estimatedFee = await account.estimateAccountDeployFee({
       classHash: params.classHash,
       constructorCalldata: params.constructorCalldata || [],
-      addressSalt: params.addressSalt || '0x0',
+      addressSalt: params.addressSalt || "0x0",
       contractAddress: constants.ZERO.toString(),
     });
 
@@ -34,19 +37,20 @@ export const estimateAccountDeployFee = async (params: EstimateAccountDeployFeeP
       resourceBounds: {
         l1_gas: {
           maxAmount: estimatedFee.resourceBounds.l1_gas.max_amount.toString(),
-          maxPricePerUnit: estimatedFee.resourceBounds.l1_gas.max_price_per_unit.toString()
+          maxPricePerUnit:
+            estimatedFee.resourceBounds.l1_gas.max_price_per_unit.toString(),
         },
         l2_gas: {
           maxAmount: estimatedFee.resourceBounds.l2_gas.max_amount.toString(),
-          maxPricePerUnit: estimatedFee.resourceBounds.l2_gas.max_price_per_unit.toString()
-        }
-      }
+          maxPricePerUnit:
+            estimatedFee.resourceBounds.l2_gas.max_price_per_unit.toString(),
+        },
+      },
     });
-
   } catch (error) {
     return JSON.stringify({
-      status: "failure", 
-      error: error instanceof Error ? error.message : "Unknown error"
+      status: "failure",
+      error: error instanceof Error ? error.message : "Unknown error",
     });
   }
 };

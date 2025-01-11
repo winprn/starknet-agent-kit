@@ -106,56 +106,97 @@ export type GetTransactionByBlockIdAndIndexParams = z.infer<
 export const declareContractSchema = z.object({
   contract: z.any().describe("The compiled contract to be declared"),
   classHash: z.string().optional().describe("Optional pre-computed class hash"),
-  compiledClassHash: z.string().optional().describe("Optional compiled class hash for Cairo 1 contracts")
+  compiledClassHash: z
+    .string()
+    .optional()
+    .describe("Optional compiled class hash for Cairo 1 contracts"),
 });
 
 // For estimate account deploy fee
 export const estimateAccountDeployFeeSchema = z.object({
-  classHash: z.string().describe("The class hash of the account contract to deploy"),
-  constructorCalldata: z.array(z.string()).optional().describe("Optional constructor parameters"),
-  addressSalt: z.string().optional().describe("Optional salt for the contract address")
+  classHash: z
+    .string()
+    .describe("The class hash of the account contract to deploy"),
+  constructorCalldata: z
+    .array(z.string())
+    .optional()
+    .describe("Optional constructor parameters"),
+  addressSalt: z
+    .string()
+    .optional()
+    .describe("Optional salt for the contract address"),
 });
 
 // For sign message
 export const signMessageSchema = z.object({
-  typedData: z.object({
-    types: z.record(z.string(), z.array(z.object({
-      name: z.string(),
-      type: z.string()
-    }))),
-    primaryType: z.string(),
-    domain: z.record(z.string(), z.union([z.string(), z.number()])),
-    message: z.record(z.string(), z.any())
-  }).describe("The typed data object conforming to EIP-712")
+  typedData: z
+    .object({
+      types: z.record(
+        z.string(),
+        z.array(
+          z.object({
+            name: z.string(),
+            type: z.string(),
+          }),
+        ),
+      ),
+      primaryType: z.string(),
+      domain: z.record(z.string(), z.union([z.string(), z.number()])),
+      message: z.record(z.string(), z.any()),
+    })
+    .describe("The typed data object conforming to EIP-712"),
 });
 
 // For verify message
 export const verifyMessageSchema = z.object({
-  typedData: z.object({
-    types: z.record(z.string(), z.array(z.object({
-      name: z.string(),
-      type: z.string()
-    }))),
-    primaryType: z.string(),
-    domain: z.record(z.string(), z.union([z.string(), z.number()])),
-    message: z.record(z.string(), z.any())
-  }).describe("The typed data that was signed"),
-  signature: z.array(z.string()).length(2).describe("The signature as array of r and s values"),
-  publicKey: z.string().describe("The public key to verify against")
+  typedData: z
+    .object({
+      types: z.record(
+        z.string(),
+        z.array(
+          z.object({
+            name: z.string(),
+            type: z.string(),
+          }),
+        ),
+      ),
+      primaryType: z.string(),
+      domain: z.record(z.string(), z.union([z.string(), z.number()])),
+      message: z.record(z.string(), z.any()),
+    })
+    .describe("The typed data that was signed"),
+  signature: z
+    .array(z.string())
+    .length(2)
+    .describe("The signature as array of r and s values"),
+  publicKey: z.string().describe("The public key to verify against"),
 });
 
 // For simulate transaction
 export const simulateTransactionSchema = z.object({
-  calls: z.array(z.object({
-    contractAddress: z.string().describe("The address of the contract to call"),
-    entrypoint: z.string().describe("The function name to call"),
-    calldata: z.array(z.union([z.string(), z.number()])).optional().describe("The parameters for the function call")
-  })).describe("Array of contract calls to simulate")
+  calls: z
+    .array(
+      z.object({
+        contractAddress: z
+          .string()
+          .describe("The address of the contract to call"),
+        entrypoint: z.string().describe("The function name to call"),
+        calldata: z
+          .array(z.union([z.string(), z.number()]))
+          .optional()
+          .describe("The parameters for the function call"),
+      }),
+    )
+    .describe("Array of contract calls to simulate"),
 });
 
 // Add type exports for the schemas
 export type DeclareContractParams = z.infer<typeof declareContractSchema>;
-export type EstimateAccountDeployFeeParams = z.infer<typeof estimateAccountDeployFeeSchema>;
+export type EstimateAccountDeployFeeParams = z.infer<
+  typeof estimateAccountDeployFeeSchema
+>;
 export type SignMessageParams = z.infer<typeof signMessageSchema>;
 export type VerifyMessageParams = z.infer<typeof verifyMessageSchema>;
-export type SimulateTransactionParams = z.infer<typeof simulateTransactionSchema>;
+export type SimulateTransactionParams = z.infer<
+  typeof simulateTransactionSchema
+>;

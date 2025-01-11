@@ -30,8 +30,8 @@ import {
   estimateAccountDeployFeeSchema,
   signMessageSchema,
   verifyMessageSchema,
-  simulateTransactionSchema
-} from './schema';
+  simulateTransactionSchema,
+} from "./schema";
 import { swapTokens } from "./method/swap";
 import { getSpecVersion } from "./method/rpc/getSpecVersion";
 import { getBlockWithTxHashes } from "./method/rpc/getBlockWithTxHashes";
@@ -232,36 +232,37 @@ export const createTools = (agent: StarknetAgentInterface) => [
     schema: blockIdSchema,
   }),
   tool(getAddress, {
-      name: "get_address",
-      description: "Returns the public (current) account address from your .env config"
-   }),
-   tool(withWalletKey(declareContract, agent), {
+    name: "get_address",
+    description:
+      "Returns the public (current) account address from your .env config",
+  }),
+  tool(withWalletKey(declareContract, agent), {
     name: "declare_contract",
     description: "Declare a new contract on Starknet",
-    schema: declareContractSchema
+    schema: declareContractSchema,
   }),
 
   tool(withWalletKey(estimateAccountDeployFee, agent), {
     name: "estimate_account_deploy_fee",
     description: "Estimate the fee required to deploy an account",
-    schema: estimateAccountDeployFeeSchema
+    schema: estimateAccountDeployFeeSchema,
   }),
 
   tool(withWalletKey(signMessage, agent), {
-    name: "sign_message", 
+    name: "sign_message",
     description: "Sign a typed data message",
-    schema: signMessageSchema
+    schema: signMessageSchema,
   }),
 
   tool(verifyMessage, {
     name: "verify_message",
     description: "Verify a signed message",
-    schema: verifyMessageSchema
+    schema: verifyMessageSchema,
   }),
 
   tool(withWalletKey(simulateTransaction, agent), {
     name: "simulate_transaction",
     description: "Simulate a transaction without executing it",
-    schema: simulateTransactionSchema
-  })
+    schema: simulateTransactionSchema,
+  }),
 ];

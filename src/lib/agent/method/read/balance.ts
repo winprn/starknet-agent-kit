@@ -9,7 +9,7 @@ export type GetOwnBalanceParams = {
 };
 
 const getTokenDecimals = (symbol: string): number => {
-  const stablecoinSymbols = ['USDC', 'USDT'];
+  const stablecoinSymbols = ["USDC", "USDT"];
   return stablecoinSymbols.includes(symbol.toUpperCase()) ? 6 : 18;
 };
 
@@ -46,7 +46,10 @@ export const getOwnBalance = async (
     const tokenContract = new Contract(erc20ABI, tokenAddress, provider);
 
     const balance = await tokenContract.balanceOf(account.address);
-    const formattedBalance = formatBalance(balance.balance.toString(), params.symbol);
+    const formattedBalance = formatBalance(
+      balance.balance.toString(),
+      params.symbol,
+    );
 
     return JSON.stringify({
       status: "success",
@@ -74,7 +77,10 @@ export const getBalance = async (params: GetBalanceParams) => {
 
     const tokenContract = new Contract(erc20ABI, tokenAddress, provider);
     const balance = await tokenContract.balanceOf(params.walletAddress);
-    const formattedBalance = formatBalance(balance.balance.toString(), params.assetSymbol);
+    const formattedBalance = formatBalance(
+      balance.balance.toString(),
+      params.assetSymbol,
+    );
 
     return JSON.stringify({
       status: "success",

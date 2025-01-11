@@ -49,7 +49,9 @@ export const transfer = async (params: transferParams): Promise<string> => {
     const accountAddress = process.env.PUBLIC_ADDRESS;
 
     if (!privateKey || !accountAddress) {
-      throw new Error("STARKNET_PRIVATE_KEY or PUBLIC_ADDRESS not set in .env file");
+      throw new Error(
+        "STARKNET_PRIVATE_KEY or PUBLIC_ADDRESS not set in .env file",
+      );
     }
 
     // Provider and account setup
@@ -63,7 +65,8 @@ export const transfer = async (params: transferParams): Promise<string> => {
     }
 
     // Amount formatting
-    const decimals = DECIMALS[params.symbol as keyof typeof DECIMALS] || DECIMALS.DEFAULT;
+    const decimals =
+      DECIMALS[params.symbol as keyof typeof DECIMALS] || DECIMALS.DEFAULT;
     const formattedAmount = formatTokenAmount(params.amount, decimals);
     const amountUint256 = uint256.bnToUint256(formattedAmount);
 
@@ -78,7 +81,10 @@ export const transfer = async (params: transferParams): Promise<string> => {
       ],
     });
 
-    console.log("transfer initiated. Transaction hash:", result.transaction_hash);
+    console.log(
+      "transfer initiated. Transaction hash:",
+      result.transaction_hash,
+    );
 
     // Wait for transaction confirmation
     await provider.waitForTransaction(result.transaction_hash);
@@ -92,7 +98,6 @@ export const transfer = async (params: transferParams): Promise<string> => {
     };
 
     return JSON.stringify(transferResult);
-
   } catch (error) {
     console.error("transfer failed:", error);
 

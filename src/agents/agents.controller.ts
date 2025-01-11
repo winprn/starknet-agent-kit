@@ -1,4 +1,11 @@
-import { Body, Controller, Get, OnModuleInit, Post, UseInterceptors } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  OnModuleInit,
+  Post,
+  UseInterceptors,
+} from "@nestjs/common";
 import { AgentRequestDTO } from "./dto/agents";
 import { StarknetAgent } from "../lib/agent/starknetAgent";
 import { AgentService } from "./services/agent.service";

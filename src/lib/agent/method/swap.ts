@@ -82,7 +82,7 @@ export const swapTokens = async (params: SwapParams, privateKey: string) => {
     );
 
     // Parse amount received from events if available
-    let amountReceived = null;
+    const amountReceived = null;
     if (events && events.length > 0) {
       // Here you would parse the relevant event to get the amount received
       // The exact parsing logic depends on the event structure
