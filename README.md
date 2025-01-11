@@ -44,7 +44,7 @@ const agent = new StarknetAgent({
 });
 
 // Execute commands in natural language
-await agent.execute("Transfer 0.1 ETH to 0x123...");
+await agent.execute("transfer 0.1 ETH to 0x123...");
 
 // Get balance
 await agent.execute("What is my ETH balance?");
@@ -60,7 +60,7 @@ await agent.execute("Create a new Argent account");
 
 - Retrieve account infos (Balance, public key, etc)
 - Create one or multiple accounts (Argent & OpenZeppelin)
-- Transfer assets between accounts
+- transfer assets between accounts
 - Play with DeFi (Swap on Avnu)
 - Play with dApps (Create a .stark domain)
 - All RPC read methods supported (getBlockNumber, getStorageAt, etc.)
@@ -123,7 +123,7 @@ x-api-key: your_api_key
 All Langchain tools are available to be imported and used directly:
 
 ```typescript
-import { getBalance, TransferERC20, swapTokens } from "starknet-agent-kit";
+import { getBalance, transfer, swapTokens } from "starknet-agent-kit";
 ```
 
 ## Testing
