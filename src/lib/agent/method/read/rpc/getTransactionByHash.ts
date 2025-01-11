@@ -1,12 +1,15 @@
+import { TransactionHashParams } from "src/lib/agent/schema";
 import { rpcProvider } from "src/lib/agent/starknetAgent";
 
-export const getBlockNumber = async () => {
+export const getTransactionByHash = async (
+  params: TransactionHashParams
+) => {
   try {
-    const blockNumber = await rpcProvider.getBlockNumber();
-
+    const { transactionHash } = params;
+    const transaction = await rpcProvider.getTransactionByHash(transactionHash);
     return JSON.stringify({
       status: "success",
-      blockNumber,
+      transaction,
     });
   } catch (error) {
     return JSON.stringify({

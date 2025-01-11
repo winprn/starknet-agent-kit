@@ -1,17 +1,10 @@
-import { RPC_URL } from "src/lib/constant";
-import { RpcProvider, BlockNumber } from "starknet";
+import { BlockIdAndContractAddressParams } from "src/lib/agent/schema";
+import { rpcProvider } from "src/lib/agent/starknetAgent";
+import { BlockNumber } from "starknet";
 
-const provider = new RpcProvider({ nodeUrl: RPC_URL });
-
-export type GetClassAtParams = {
-  contractAddress: string;
-  blockIdentifier?: string | number;
-};
-
-export const getClassAt = async (params: GetClassAtParams) => {
+export const getClassAt = async (params: BlockIdAndContractAddressParams) => {
   try {
-    let blockIdentifier: BlockNumber | string =
-      params.blockIdentifier || "latest";
+    let blockIdentifier: BlockNumber | string = params.blockId || "latest";
 
     if (
       typeof blockIdentifier === "string" &&
@@ -21,9 +14,9 @@ export const getClassAt = async (params: GetClassAtParams) => {
       blockIdentifier = Number(blockIdentifier);
     }
 
-    const contractClass = await provider.getClassAt(
+    const contractClass = await rpcProvider.getClassAt(
       params.contractAddress,
-      blockIdentifier,
+      blockIdentifier
     );
 
     return JSON.stringify({

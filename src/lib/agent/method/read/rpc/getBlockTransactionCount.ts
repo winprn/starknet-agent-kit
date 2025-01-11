@@ -1,18 +1,10 @@
-import { RPC_URL } from "src/lib/constant";
-import { RpcProvider, BlockNumber } from "starknet";
+import { BlockIdParams } from "src/lib/agent/schema";
+import { rpcProvider } from "src/lib/agent/starknetAgent";
+import { BlockNumber } from "starknet";
 
-const provider = new RpcProvider({ nodeUrl: RPC_URL });
-
-export type GetBlockTransactionCountParams = {
-  blockIdentifier?: string | number;
-};
-
-export const getBlockTransactionCount = async (
-  params?: GetBlockTransactionCountParams,
-) => {
+export const getBlockTransactionCount = async (params?: BlockIdParams) => {
   try {
-    let blockIdentifier: BlockNumber | string =
-      params?.blockIdentifier || "latest";
+    let blockIdentifier: BlockNumber | string = params?.blockId || "latest";
 
     if (
       typeof blockIdentifier === "string" &&
@@ -23,7 +15,7 @@ export const getBlockTransactionCount = async (
     }
 
     const transactionCount =
-      await provider.getBlockTransactionCount(blockIdentifier);
+      await rpcProvider.getBlockTransactionCount(blockIdentifier);
 
     return JSON.stringify({
       status: "success",

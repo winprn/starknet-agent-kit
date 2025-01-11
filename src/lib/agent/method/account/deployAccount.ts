@@ -19,12 +19,12 @@ export const DeployOZAccount = async (params: DeployOZAccountParams) => {
       params.publicKey,
       OZaccountClassHash,
       OZaccountConstructorCallData,
-      0,
+      0
     );
     const OZaccount = new Account(
       provider,
       OZcontractAddress,
-      params.privateKey,
+      params.privateKey
     );
 
     const { transaction_hash, contract_address } =
@@ -37,7 +37,7 @@ export const DeployOZAccount = async (params: DeployOZAccountParams) => {
     await provider.waitForTransaction(transaction_hash);
     console.log(
       "New OpenZeppelin account created.\n   address =",
-      contract_address,
+      contract_address
     );
     return JSON.stringify({
       status: "success",
@@ -64,19 +64,17 @@ export const DeployArgentAccount = async (params: DeployArgentParams) => {
       owner: params.publicKeyAX,
       guardian: "0",
     });
-    console.log(params.publicKeyAX);
-    console.log(params.privateKeyAX);
     const AXcontractAddress = hash.calculateContractAddressFromHash(
       params.publicKeyAX,
       argentXaccountClassHash,
       AXConstructorCallData,
-      0,
+      0
     );
 
     const accountAX = new Account(
       provider,
       AXcontractAddress,
-      params.privateKeyAX,
+      params.privateKeyAX
     );
 
     const deployAccountPayload = {

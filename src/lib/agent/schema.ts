@@ -7,6 +7,29 @@ export const TransferERC20schema = z.object({
   symbol: z.string().describe("The symbol of the erc20 token"),
 });
 
+export const blockIdSchema = z.object({
+  blockId: z.union([
+    z
+      .string()
+      .describe(
+        "The block identifier. Can be 'latest', 'pending', or a block hash."
+      ),
+    z.number().describe("A block number."),
+  ]),
+});
+
+export const contractAddressSchema = z.object({
+  contractAddress: z.string().describe("The address of the contract"),
+});
+
+export const transactionHashSchema = z.object({
+  transactionHash: z
+    .string()
+    .describe(
+      "The hash of the requested transaction."
+    ),
+});
+
 export const DeployOZAccountSchema = z.object({
   publicKey: z.string().describe("The public key to deploy the OZ Account"),
   privateKey: z.string().describe("The private key to deploy the OZ Account"),
@@ -36,51 +59,8 @@ export const DeployArgentAccountSchema = z.object({
     .describe("The private key to deploy the Argent Account"),
 });
 
-export const getStorageAtSchema = z.object({
-  contractAddress: z
-    .string()
-    .describe("The contract address to get storage from"),
-  key: z.string().describe("The storage slot key to query"),
-  blockIdentifier: z
-    .string()
-    .optional()
-    .describe("Block identifier (optional, defaults to 'latest')"),
-});
-
-export const getBlockTransactionCountSchema = z.object({
-  blockIdentifier: z
-    .string()
-    .optional()
-    .describe("Block identifier (optional, defaults to 'latest')"),
-});
-
-export const getClassAtSchema = z
-  .object({
-    contractAddress: z
-      .string()
-      .describe("The contract address to get the class from"),
-    blockIdentifier: z
-      .union([z.literal("latest"), z.string().regex(/^[0-9]+$/), z.number()])
-      .optional()
-      .describe("Block identifier (optional, defaults to 'latest')"),
-  })
-  .strict();
-
-export const getClassHashSchema = z
-  .object({
-    contractAddress: z
-      .string()
-      .describe("The contract address to get the class hash from"),
-    blockIdentifier: z
-      .union([
-        z.literal("latest"),
-        z.number(),
-        z.string().regex(/^0x[0-9a-fA-F]+$/),
-      ])
-      .optional()
-      .default("latest")
-      .describe("Block identifier (defaults to 'latest')"),
-  })
+export const blockIdAndContractAddressSchema = blockIdSchema
+  .merge(contractAddressSchema)
   .strict();
 
 export const swapSchema = z.object({
@@ -93,6 +73,31 @@ export const swapSchema = z.object({
   sellAmount: z.number().positive().describe("Amount of tokens to sell"),
 });
 
+export const getStorageAtSchema = blockIdAndContractAddressSchema.merge(
+  z.object({
+    key: z
+      .string()
+      .describe("The key to the storage value for the given contract"),
+  })
+);
+
+export const getTransactionByBlockIdAndIndexSchema = blockIdSchema.merge(
+  z.object({
+    transactionIndex: z
+      .number()
+      .int()
+      .nonnegative()
+      .describe("The index of the transaction within the block."),
+  })
+);
+
 // Types for function parameters that match the schemas
-export type GetClassAtParams = z.infer<typeof getClassAtSchema>;
-export type GetClassHashParams = z.infer<typeof getClassHashSchema>;
+export type GetStorageParams = z.infer<typeof getStorageAtSchema>;
+export type BlockIdParams = z.infer<typeof blockIdSchema>;
+export type TransactionHashParams = z.infer<typeof transactionHashSchema>;
+export type BlockIdAndContractAddressParams = z.infer<
+  typeof blockIdAndContractAddressSchema
+>;
+export type GetTransactionByBlockIdAndIndexParams = z.infer<
+  typeof getTransactionByBlockIdAndIndexSchema
+>;

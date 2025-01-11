@@ -1,12 +1,12 @@
 import { rpcProvider } from "src/lib/agent/starknetAgent";
 
-export const getBlockNumber = async () => {
+export const getChainId = async () => {
   try {
-    const blockNumber = await rpcProvider.getBlockNumber();
+    const chainId = await rpcProvider.getChainId();
 
     return JSON.stringify({
       status: "success",
-      blockNumber,
+      chainId,
     });
   } catch (error) {
     return JSON.stringify({

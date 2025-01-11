@@ -1,43 +1,30 @@
 import { RPC_URL, tokenAddresses } from "src/lib/constant";
-import {
-  ec,
-  RpcProvider,
-  hash,
-  CallData,
-  Provider,
-  Account,
-  TransactionFinalityStatus,
-  Contract,
-  cairo,
-  Uint256,
-  uint256,
-  transaction,
-} from "starknet";
+import { RpcProvider, Account, uint256 } from "starknet";
 import { config } from "dotenv";
-import { symbol } from "zod";
 
 config();
 
-const abiERC20 = [
-  {
-    name: "balanceOf",
-    type: "function",
-    inputs: [{ name: "account", type: "felt" }],
-    outputs: [{ name: "balance", type: "Uint256" }],
-    stateMutability: "view",
-  },
-  {
-    name: "transfer",
-    type: "function",
-    inputs: [
-      { name: "recipient", type: "felt" },
-      { name: "amount", type: "Uint256" },
-    ],
-    outputs: [{ name: "success", type: "felt" }],
-    stateMutability: "external",
-  },
-];
-
+/*
+  const abiERC20 = [
+    {
+      name: "balanceOf",
+      type: "function",
+      inputs: [{ name: "account", type: "felt" }],
+      outputs: [{ name: "balance", type: "Uint256" }],
+      stateMutability: "view",
+    },
+    {
+      name: "transfer",
+      type: "function",
+      inputs: [
+        { name: "recipient", type: "felt" },
+        { name: "amount", type: "Uint256" },
+      ],
+      outputs: [{ name: "success", type: "felt" }],
+      stateMutability: "external",
+    },
+  ];
+*/
 const provider = new RpcProvider({ nodeUrl: RPC_URL });
 
 export type TransferERC20Params = {
@@ -53,7 +40,7 @@ export const TransferERC20 = async (params: TransferERC20Params) => {
 
     if (!privateKey || !accountAddress) {
       throw new Error(
-        "StarknetPrivateKey or PublicKey is not set on your .env file !",
+        "StarknetPrivateKey or PublicKey is not set on your .env file !"
       );
     }
 
