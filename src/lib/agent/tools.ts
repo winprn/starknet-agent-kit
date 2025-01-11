@@ -14,6 +14,7 @@ import { getBlockTransactionCount } from "./method/read/rpc/getBlockTransactionC
 import { getStorageAt } from "./method/read/rpc/getStorageAt";
 import { getClassAt } from "./method/read/rpc/getClassAt";
 import { getClassHashAt } from "./method/read/rpc/getClassHash";
+import { getSpecVersion } from "./method/read/rpc/getSpecVersion";
 import {
   getOwnBalanceSchema,
   getBalanceSchema,
@@ -219,5 +220,6 @@ export const createTools = (agent: StarknetAgentInterface) => [
     description:
       "Retrieve execution traces for all transactions in a specified block, including detailed insights into their execution.",
     schema: blockIdSchema,
+    description: "Get the Starknet node specification version",
   }),
 ];

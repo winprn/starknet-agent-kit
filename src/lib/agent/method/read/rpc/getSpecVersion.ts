@@ -9,7 +9,7 @@ export const getSpecVersion = async () => {
 
     return JSON.stringify({
       status: "success",
-      specVersion,
+      specVersion: specVersion.toString(),
     });
   } catch (error) {
     return JSON.stringify({
