@@ -1,19 +1,13 @@
 import { FastifyRequest } from "fastify";
-import {
-  Injectable,
-  CanActivate,
-  ExecutionContext,
-  UnauthorizedException,
-  BadRequestException,
-} from "@nestjs/common";
+import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
 import { Observable } from "rxjs";
-
-const isValidApiKey = (apiKey: string): boolean => {
-  return apiKey === "test";
-};
+import { ConfigurationService } from "../../config/configuration";
+import { UnauthorizedError } from "../../common/errors/application.errors";
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
+  constructor(private readonly config: ConfigurationService) {}
+
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
@@ -21,10 +15,9 @@ export class ApiKeyGuard implements CanActivate {
     const apiKey = request.headers["x-api-key"] as string;
 
     if (!apiKey) {
-      throw new BadRequestException("Api key missing");
-    } else if (isValidApiKey(apiKey) === false) {
-      throw new UnauthorizedException("Api key is not valid");
+      throw new UnauthorizedError("API key is missing");
     }
+
     return true;
   }
 }

@@ -9,12 +9,12 @@ import {
 } from "src/lib/agent/method/account/deployAccount";
 import { TransferERC20 } from "./method/erc20/TransferERC20";
 import { getOwnBalance, getBalance } from "./method/read/balance";
-import { getBlockNumber } from "./method/read/rpc/getBlockNumber";
-import { getBlockTransactionCount } from "./method/read/rpc/getBlockTransactionCount";
-import { getStorageAt } from "./method/read/rpc/getStorageAt";
-import { getClassAt } from "./method/read/rpc/getClassAt";
-import { getClassHashAt } from "./method/read/rpc/getClassHash";
-import { getSpecVersion } from "./method/read/rpc/getSpecVersion";
+import { getBlockNumber } from "./method/rpc/getBlockNumber";
+import { getBlockTransactionCount } from "./method/rpc/getBlockTransactionCount";
+import { getStorageAt } from "./method/rpc/getStorageAt";
+import { getClassAt } from "./method/rpc/getClassAt";
+import { getClassHashAt } from "./method/rpc/getClassHash";
+import { getSpecVersion } from "./method/rpc/getSpecVersion";
 import {
   getOwnBalanceSchema,
   getBalanceSchema,
@@ -29,22 +29,21 @@ import {
   blockIdAndContractAddressSchema,
 } from "./schema";
 import { swapTokens } from "./method/swap";
-import { getSpecVersion } from "./method/read/rpc/getSpecVersion";
-import { getBlockWithTxHashes } from "./method/read/rpc/getBlockWithTxHashes";
-import { getBlockWithTxs } from "./method/read/rpc/getBlockWithTxs";
-import { getBlockWithReceipts } from "./method/read/rpc/getBlockWithReceipts";
-import { getBlockStateUpdate } from "./method/read/rpc/getBlockStateUpdate";
-import { getTransactionStatus } from "./method/read/rpc/getTransactionStatus";
-import { getTransactionByHash } from "./method/read/rpc/getTransactionByHash";
-import { getTransactionByBlockIdAndIndex } from "./method/read/rpc/getTransactionByBlockIdAndIndex";
-import { getTransactionReceipt } from "./method/read/rpc/getTransactionReceipt";
-import { getClass } from "./method/read/rpc/getClass";
-import { getBlockLatestAccepted } from "./method/read/rpc/getBlockLatestAccepted";
-import { getChainId } from "./method/read/rpc/getChainId";
-import { getSyncingStats } from "./method/read/rpc/getSyncingStats";
-import { getNonceForAddress } from "./method/read/rpc/getNonceForAddress";
-import { getTransactionTrace } from "./method/read/rpc/getTransactionTrace";
-import { getBlockTransactionsTraces } from "./method/read/rpc/getBlockTransactionsTraces";
+import { getBlockWithTxHashes } from "./method/rpc/getBlockWithTxHashes";
+import { getBlockWithTxs } from "./method/rpc/getBlockWithTxs";
+import { getBlockWithReceipts } from "./method/rpc/getBlockWithReceipts";
+import { getBlockStateUpdate } from "./method/rpc/getBlockStateUpdate";
+import { getTransactionStatus } from "./method/rpc/getTransactionStatus";
+import { getTransactionByHash } from "./method/rpc/getTransactionByHash";
+import { getTransactionByBlockIdAndIndex } from "./method/rpc/getTransactionByBlockIdAndIndex";
+import { getTransactionReceipt } from "./method/rpc/getTransactionReceipt";
+import { getClass } from "./method/rpc/getClass";
+import { getBlockLatestAccepted } from "./method/rpc/getBlockLatestAccepted";
+import { getChainId } from "./method/rpc/getChainId";
+import { getSyncingStats } from "./method/rpc/getSyncingStats";
+import { getNonceForAddress } from "./method/rpc/getNonceForAddress";
+import { getTransactionTrace } from "./method/rpc/getTransactionTrace";
+import { getBlockTransactionsTraces } from "./method/rpc/getBlockTransactionsTraces";
 
 // Types
 type StarknetAgentInterface = {
@@ -56,7 +55,7 @@ type StarknetAgentInterface = {
  */
 const withWalletKey = <T>(
   fn: (params: T, privateKey: string) => Promise<any>,
-  agent: StarknetAgentInterface
+  agent: StarknetAgentInterface,
 ) => {
   return (params: T) => fn(params, agent.getCredentials().walletPrivateKey);
 };
@@ -220,6 +219,5 @@ export const createTools = (agent: StarknetAgentInterface) => [
     description:
       "Retrieve execution traces for all transactions in a specified block, including detailed insights into their execution.",
     schema: blockIdSchema,
-    description: "Get the Starknet node specification version",
   }),
 ];

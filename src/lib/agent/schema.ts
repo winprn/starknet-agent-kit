@@ -12,7 +12,7 @@ export const blockIdSchema = z.object({
     z
       .string()
       .describe(
-        "The block identifier. Can be 'latest', 'pending', or a block hash."
+        "The block identifier. Can be 'latest', 'pending', or a block hash.",
       ),
     z.number().describe("A block number."),
   ]),
@@ -25,9 +25,7 @@ export const contractAddressSchema = z.object({
 export const transactionHashSchema = z.object({
   transactionHash: z
     .string()
-    .describe(
-      "The hash of the requested transaction."
-    ),
+    .describe("The hash of the requested transaction."),
 });
 
 export const DeployOZAccountSchema = z.object({
@@ -78,7 +76,7 @@ export const getStorageAtSchema = blockIdAndContractAddressSchema.merge(
     key: z
       .string()
       .describe("The key to the storage value for the given contract"),
-  })
+  }),
 );
 
 export const getTransactionByBlockIdAndIndexSchema = blockIdSchema.merge(
@@ -88,7 +86,7 @@ export const getTransactionByBlockIdAndIndexSchema = blockIdSchema.merge(
       .int()
       .nonnegative()
       .describe("The index of the transaction within the block."),
-  })
+  }),
 );
 
 // Types for function parameters that match the schemas

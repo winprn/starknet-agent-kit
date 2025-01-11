@@ -1,5 +1,7 @@
 import { RPC_URL } from "src/lib/constant";
 import { Account, RpcProvider, hash, CallData } from "starknet";
+import { StarknetAgent } from "../../starknetAgent";
+import { AccountDetails } from "src/lib/utils/types";
 
 const provider = new RpcProvider({ nodeUrl: RPC_URL });
 
@@ -8,41 +10,46 @@ export type DeployOZAccountParams = {
   privateKey: string;
 };
 
-export const DeployOZAccount = async (params: DeployOZAccountParams) => {
+export const DeployOZAccount = async (params: {
+  publicKey: string;
+  privateKey: string;
+}) => {
   try {
-    const OZaccountClassHash =
-      "0x061dac032f228abef9c6626f995015233097ae253a7f72d68552db02f2971b8f";
-    const OZaccountConstructorCallData = CallData.compile({
-      publicKey: params.publicKey,
+    const agent = new StarknetAgent({
+      walletPrivateKey: process.env.STARKNET_PRIVATE_KEY,
+      anthropicApiKey: process.env.ANTHROPIC_API_KEY,
     });
-    const OZcontractAddress = hash.calculateContractAddressFromHash(
-      params.publicKey,
-      OZaccountClassHash,
-      OZaccountConstructorCallData,
-      0
-    );
-    const OZaccount = new Account(
-      provider,
-      OZcontractAddress,
-      params.privateKey
+
+    const accountDetails: AccountDetails = {
+      publicKey: params.publicKey,
+      privateKey: params.privateKey,
+      address: "", // Will be calculated by deployAccount
+      deployStatus: false,
+    };
+
+    // First estimate the deployment fee
+    const estimatedFee =
+      await agent.accountManager.estimateAccountDeployFee(accountDetails);
+    console.log("Estimated deployment fee:", estimatedFee);
+
+    // Deploy the account
+    const result = await agent.accountManager.deployAccount(accountDetails);
+
+    // Monitor the deployment transaction
+    if (!result.transactionHash) {
+      throw new Error("No transaction hash returned from deployment");
+    }
+
+    const receipt = await agent.transactionMonitor.waitForTransaction(
+      result.transactionHash,
+      (status) => console.log("Deployment status:", status),
     );
 
-    const { transaction_hash, contract_address } =
-      await OZaccount.deployAccount({
-        classHash: OZaccountClassHash,
-        constructorCalldata: OZaccountConstructorCallData,
-        addressSalt: params.publicKey,
-      });
-
-    await provider.waitForTransaction(transaction_hash);
-    console.log(
-      "New OpenZeppelin account created.\n   address =",
-      contract_address
-    );
     return JSON.stringify({
       status: "success",
       wallet: "Open Zeppelin",
-      contract_address: contract_address,
+      transaction_hash: result.transactionHash,
+      receipt: receipt,
     });
   } catch (error) {
     return JSON.stringify({
@@ -68,13 +75,13 @@ export const DeployArgentAccount = async (params: DeployArgentParams) => {
       params.publicKeyAX,
       argentXaccountClassHash,
       AXConstructorCallData,
-      0
+      0,
     );
 
     const accountAX = new Account(
       provider,
       AXcontractAddress,
-      params.privateKeyAX
+      params.privateKeyAX,
     );
 
     const deployAccountPayload = {

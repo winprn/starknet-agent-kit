@@ -2,7 +2,9 @@ import { BlockIdAndContractAddressParams } from "src/lib/agent/schema";
 import { rpcProvider } from "src/lib/agent/starknetAgent";
 import { BlockNumber } from "starknet";
 
-export const getNonceForAddress = async (params: BlockIdAndContractAddressParams) => {
+export const getClassHashAt = async (
+  params: BlockIdAndContractAddressParams,
+) => {
   try {
     let blockIdentifier: BlockNumber | string = params.blockId || "latest";
 
@@ -14,16 +16,18 @@ export const getNonceForAddress = async (params: BlockIdAndContractAddressParams
       blockIdentifier = Number(blockIdentifier);
     }
 
-    const contractClass = await rpcProvider.getNonceForAddress(
+    // Note the order of parameters for getClassHashAt is different from getClassAt!
+    const classHash = await rpcProvider.getClassHashAt(
       params.contractAddress,
-      blockIdentifier
+      blockIdentifier,
     );
 
     return JSON.stringify({
       status: "success",
-      contractClass,
+      classHash,
     });
   } catch (error) {
+    console.error("GetClassHash error:", error);
     return JSON.stringify({
       status: "failure",
       error: error instanceof Error ? error.message : "Unknown error",

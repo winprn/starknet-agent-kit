@@ -16,7 +16,7 @@ export const getClass = async (params: BlockIdAndContractAddressParams) => {
 
     const contractClass = await rpcProvider.getClass(
       params.contractAddress,
-      blockIdentifier
+      blockIdentifier,
     );
 
     return JSON.stringify({
