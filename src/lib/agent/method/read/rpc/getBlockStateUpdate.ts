@@ -2,7 +2,7 @@ import { BlockIdParams } from "src/lib/agent/schema";
 import { rpcProvider } from "src/lib/agent/starknetAgent";
 
 export const getBlockStateUpdate = async (
-  params?: BlockIdParams
+  params: BlockIdParams
 ) => {
   try {
     const { blockId } = params;

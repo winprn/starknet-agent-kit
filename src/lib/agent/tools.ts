@@ -14,7 +14,6 @@ import { getBlockTransactionCount } from "./method/read/rpc/getBlockTransactionC
 import { getStorageAt } from "./method/read/rpc/getStorageAt";
 import { getClassAt } from "./method/read/rpc/getClassAt";
 import { getClassHashAt } from "./method/read/rpc/getClassHash";
-import { getSpecVersion } from "./method/read/rpc/getSpecVersion";
 import {
   getOwnBalanceSchema,
   getBalanceSchema,
@@ -45,6 +44,7 @@ import { getSyncingStats } from "./method/read/rpc/getSyncingStats";
 import { getNonceForAddress } from "./method/read/rpc/getNonceForAddress";
 import { getTransactionTrace } from "./method/read/rpc/getTransactionTrace";
 import { getBlockTransactionsTraces } from "./method/read/rpc/getBlockTransactionsTraces";
+import { getAddress } from "./method/account/getAddress";
 
 // Types
 type StarknetAgentInterface = {
@@ -220,6 +220,9 @@ export const createTools = (agent: StarknetAgentInterface) => [
     description:
       "Retrieve execution traces for all transactions in a specified block, including detailed insights into their execution.",
     schema: blockIdSchema,
-    description: "Get the Starknet node specification version",
   }),
+  tool(getAddress, {
+      name: "get_address",
+      description: "Returns the public (current) account address from your .env config"
+   }),
 ];
