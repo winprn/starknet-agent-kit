@@ -15,7 +15,4 @@ export const UNAUTHORIZED = "Unauthorized";
 export const FORBIDDEN = "Forbidden";
 export const BAD_REQUEST = "Bad request";
 
-export const DEFAULT_RPC_URL =
-  "https://starknet-mainnet.g.alchemy.com/starknet/version/rpc/v0_7/Xj-rCxxzGcBnS3HwqOnBqO8TMa8NRGky";
-
 export const RPC_URL = process.env.RPC_URL;
