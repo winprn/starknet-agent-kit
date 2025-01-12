@@ -25,6 +25,10 @@ export class ConfigurationService {
     return this.config.NODE_ENV;
   }
 
+  get apiKey(): string {
+    return this.config.API_KEY;
+  }
+
   get starknet() {
     return {
       privateKey: this.config.STARKNET_PRIVATE_KEY,
