@@ -18,6 +18,10 @@ export class ApiKeyGuard implements CanActivate {
       throw new UnauthorizedError("API key is missing");
     }
 
+    if (apiKey != this.config.apiKey) {
+      throw new UnauthorizedError("API key is not valid");
+    }
+
     return true;
   }
 }

@@ -70,10 +70,27 @@ await agent.execute("Create a new Argent account");
 Create a `.env` file with the following variables:
 
 ```env
-  STARKNET_PRIVATE_KEY=your_private_key
-  PUBLIC_ADDRESS=your_public_address
-  ANTHROPIC_API_KEY=your_anthropic_api_key
-  RPC_URL=your_rpc_url
+# Your Starknet wallet private key (required)
+STARKNET_PRIVATE_KEY=your_private_key
+
+# Your Starknet public address (required)
+PUBLIC_ADDRESS=your_public_address
+
+# Your Anthropic API key for AI functionality (required)
+# Get it from: https://console.anthropic.com/
+ANTHROPIC_API_KEY=your_anthropic_api_key
+
+# Your Starknet RPC URL (required)
+# You can use public endpoints or get a dedicated one from providers like Infura
+RPC_URL=your_rpc_url
+
+# Your custom API key for securing the endpoints (required)
+# Generate a strong random string to protect your API endpoints
+# This key must be included in the x-api-key header when making requests to your API
+# You can generate a secure random string using these commands:
+#   - Linux/macOS: openssl rand -hex 32
+#   - Windows (PowerShell): -join ((48..57) + (65..90) + (97..122) | Get-Random -Count 32 | % {[char]$_})
+API_KEY=your_api_key
 ```
 
 ## Local Development
