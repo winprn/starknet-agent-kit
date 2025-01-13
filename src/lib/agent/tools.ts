@@ -8,6 +8,7 @@ import {
   DeployOZAccount,
 } from "src/lib/agent/method/account/deployAccount";
 import { transfer } from "./method/token/transfer";
+import {simulateDeployAccountTransaction, simulateInvokeTransaction } from "src/lib/agent/method/transaction/simulateTransaction";
 import { getOwnBalance, getBalance } from "./method/read/balance";
 import { getBlockNumber } from "./method/rpc/getBlockNumber";
 import { getBlockTransactionCount } from "./method/rpc/getBlockTransactionCount";
@@ -30,7 +31,8 @@ import {
   estimateAccountDeployFeeSchema,
   signMessageSchema,
   verifyMessageSchema,
-  simulateTransactionSchema,
+  simulateInvokeTransactionSchema,
+  simulateDeployAccountTransactionSchema,
 } from "./schema";
 import { swapTokens } from "./method/swap";
 import { getSpecVersion } from "./method/rpc/getSpecVersion";
@@ -54,7 +56,6 @@ import { declareContract } from "./method/contract/declareContract";
 import { estimateAccountDeployFee } from "./method/account/estimateAccountDeployFee";
 import { signMessage } from "./method/account/signMessage";
 import { verifyMessage } from "./method/account/verifyMessage";
-import { simulateTransaction } from "./method/transaction/simulateTransaction";
 
 // Types
 type StarknetAgentInterface = {
@@ -259,10 +260,15 @@ export const createTools = (agent: StarknetAgentInterface) => [
     description: "Verify a signed message",
     schema: verifyMessageSchema,
   }),
-
-  tool(withWalletKey(simulateTransaction, agent), {
+  tool(withWalletKey(simulateInvokeTransaction,agent), {
     name: "simulate_transaction",
     description: "Simulate a transaction without executing it",
-    schema: simulateTransactionSchema,
+    schema: simulateInvokeTransactionSchema,
   }),
+  tool(withWalletKey(simulateDeployAccountTransaction,agent), {
+    name: "simulate_deploy_account_transaction",
+    description: "Simulate Deploy Account transaction without executing it",
+    schema: simulateDeployAccountTransactionSchema,
+  }),
+
 ];

@@ -112,7 +112,41 @@ export const declareContractSchema = z.object({
     .describe("Optional compiled class hash for Cairo 1 contracts"),
 });
 
-// For estimate account deploy fee
+
+/* For simulate Invoke Transaction */
+
+const callSchema = z.object({
+  contractAddress: z.string().describe("The contract Address"),
+  entrypoint: z.string().describe("The entrypoint"),
+  calldata: z.array(z.string()).or(z.record(z.any())).optional()
+});
+
+export const simulateInvokeTransactionSchema = z.object({
+  accountAddress: z
+      .string()
+      .describe("Account Address/public key"),
+  calls: z.array(callSchema)
+});
+
+
+ /* For simulate Deploy Account Transaction*/
+const PayloadDeploySchema = z.object({
+  classHash: z.string().describe("The class Hash Address"),
+  constructorCalldata: z.array(z.string()).or(z.record(z.any())).optional(),
+  addressSalt: z.union([
+      z.string().regex(/^0x[0-9a-fA-F]+$/),
+      z.number(),
+      z.bigint()
+  ]).optional(),
+  contractAddressSchema: z.string().describe("ContractAddress").optional(),
+});
+
+export const simulateDeployAccountTransactionSchema = z.object({
+  accountAddress: z.string().describe("Account Address"),
+  payloads: z.array(PayloadDeploySchema)
+});
+
+/* for estimate account deploye fee */
 export const estimateAccountDeployFeeSchema = z.object({
   classHash: z
     .string()
@@ -172,23 +206,6 @@ export const verifyMessageSchema = z.object({
   publicKey: z.string().describe("The public key to verify against"),
 });
 
-// For simulate transaction
-export const simulateTransactionSchema = z.object({
-  calls: z
-    .array(
-      z.object({
-        contractAddress: z
-          .string()
-          .describe("The address of the contract to call"),
-        entrypoint: z.string().describe("The function name to call"),
-        calldata: z
-          .array(z.union([z.string(), z.number()]))
-          .optional()
-          .describe("The parameters for the function call"),
-      }),
-    )
-    .describe("Array of contract calls to simulate"),
-});
 
 // Add type exports for the schemas
 export type DeclareContractParams = z.infer<typeof declareContractSchema>;
@@ -197,6 +214,3 @@ export type EstimateAccountDeployFeeParams = z.infer<
 >;
 export type SignMessageParams = z.infer<typeof signMessageSchema>;
 export type VerifyMessageParams = z.infer<typeof verifyMessageSchema>;
-export type SimulateTransactionParams = z.infer<
-  typeof simulateTransactionSchema
->;
