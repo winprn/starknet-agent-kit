@@ -1,158 +1,149 @@
 <h1 align="center">
-  <img src="https://pbs.twimg.com/profile_images/1834202903189618688/N4J8emeY_400x400.png" width="50"><br>
-  starknet-agent-kit (alpha)
+ <img src="https://pbs.twimg.com/profile_images/1834202903189618688/N4J8emeY_400x400.png" width="50"><br>
+ starknet-agent-kit (alpha)
 </h1>
-
 <p align="center">
-  <a href="https://www.npmjs.com/package/starknet-agent-kit">
-    <img src="https://img.shields.io/npm/v/starknet-agent-kit.svg" alt="NPM Version" />
-  </a>
-  <a href="https://github.com/kasarlabs/starknet-agent-kit/blob/main/LICENSE">
-    <img src="https://img.shields.io/npm/l/starknet-agent-kit.svg" alt="License" />
-  </a>
-  <a href="https://github.com/kasarlabs/starknet-agent-kit/stargazers">
-    <img src="https://img.shields.io/github/stars/kasarlabs/starknet-agent-kit.svg" alt="GitHub Stars" />
-  </a>
-  <a href="https://nodejs.org">
-    <img src="https://img.shields.io/node/v/starknet-agent-kit.svg" alt="Node Version" />
-  </a>
+<a href="https://www.npmjs.com/package/starknet-agent-kit">
+<img src="https://img.shields.io/npm/v/starknet-agent-kit.svg" alt="NPM Version" />
+</a>
+<a href="https://github.com/kasarlabs/starknet-agent-kit/blob/main/LICENSE">
+<img src="https://img.shields.io/npm/l/starknet-agent-kit.svg" alt="License" />
+</a>
+<a href="https://github.com/kasarlabs/starknet-agent-kit/stargazers">
+<img src="https://img.shields.io/github/stars/kasarlabs/starknet-agent-kit.svg" alt="GitHub Stars" />
+</a>
+<a href="https://nodejs.org">
+<img src="https://img.shields.io/node/v/starknet-agent-kit.svg" alt="Node Version" />
+</a>
 </p>
 
-A NestJS-based toolkit for creating AI agents that can interact with the Starknet blockchain.
+A toolkit for creating AI agents that can interact with the Starknet blockchain, available both as an NPM package and a ready-to-use NestJS server.
 
 > ⚠️ **Warning**: This kit is currently under development. Use it at your own risk! Please be aware that sharing sensitive information such as private keys, personal data, or confidential details with AI models or tools carries inherent security risks. The contributors of this repository are **not responsible** for any loss, damage, or issues arising from its use.
 
-## Getting Started
+## Features
+
+- Retrieve account information (Balance, public key, etc.)
+- Create one or multiple accounts (Argent & OpenZeppelin)
+- Transfer assets between accounts
+- DeFi operations (Swap on Avnu)
+- dApp interactions (Create a .stark domain)
+- All RPC read methods supported (getBlockNumber, getStorageAt, etc.)
+
+## Installation
+
+```bash
+npm install starknet-agent-kit
+```
+
+Required peer dependencies:
 
 ```bash
 npm install @nestjs/common @nestjs/core @nestjs/platform-fastify starknet @langchain/anthropic
 ```
 
-You will need two things:
+## Prerequisites
 
+You will need:
 - A Starknet wallet private key (you can get one from [Argent X](https://www.argent.xyz/argent-x))
-- An Anthropic API key
+- An AI provider API key (supported providers: Anthropic, OpenAI, Google (Gemini), Ollama)
 
-### Basic Usage
+## Usage
+
+### As an NPM Package
 
 ```typescript
 import { StarknetAgent } from 'starknet-agent-kit';
 
 const agent = new StarknetAgent({
-  anthropicApiKey: process.env.ANTHROPIC_API_KEY,
-  walletPrivateKey: process.env.PRIVATE_KEY,
+  aiProviderApiKey: 'your-ai-provider-key',
+  aiProvider: 'anthropic', // or 'openai', 'gemini', 'ollama'
+  aiModel: 'claude-3-5-sonnet-latest',
+  walletPrivateKey: 'your-wallet-private-key',
+  rpcUrl: 'your-rpc-url'
 });
 
 // Execute commands in natural language
 await agent.execute('transfer 0.1 ETH to 0x123...');
-
-// Get balance
 await agent.execute('What is my ETH balance?');
-
-// Swap tokens
 await agent.execute('Swap 5 USDC for ETH');
-
-// Create account
-await agent.execute('Create a new Argent account');
 ```
 
-## Features
+### Using Individual Tools
 
-- Retrieve account infos (Balance, public key, etc)
-- Create one or multiple accounts (Argent & OpenZeppelin)
-- transfer assets between accounts
-- Play with DeFi (Swap on Avnu)
-- Play with dApps (Create a .stark domain)
-- All RPC read methods supported (getBlockNumber, getStorageAt, etc.)
+All Langchain tools are available for direct import:
 
-## Environment Variables
+```typescript
+import { getBalance, transfer, swapTokens } from 'starknet-agent-kit';
 
-Create a `.env` file with the following variables:
-
-```env
-# Your Starknet wallet private key (required)
-PRIVATE_KEY=your_private_key
-
-# Your Starknet public address (required)
-PUBLIC_ADDRESS=your_public_address
-
-# Your Anthropic API key for AI functionality (required)
-# Get it from: https://console.anthropic.com/
-ANTHROPIC_API_KEY=your_anthropic_api_key
-
-# Your Starknet RPC URL (required)
-# You can use public endpoints or get a dedicated one from providers like Infura
-RPC_URL=your_rpc_url
-
-# Your custom API key for securing the endpoints (required)
-# Generate a strong random string to protect your API endpoints
-# This key must be included in the x-api-key header when making requests to your API
-# You can generate a secure random string using these commands:
-#   - Linux/macOS: openssl rand -hex 32
-#   - Windows (PowerShell): -join ((48..57) + (65..90) + (97..122) | Get-Random -Count 32 | % {[char]$_})
-API_KEY=your_api_key
+// Use tools individually
+const balance = await getBalance(address);
 ```
 
-## Local Development
+## Running as a Server
+
+The package includes a ready-to-use NestJS server implementation.
+
+### Local Development
 
 1. Clone the repository:
-
 ```bash
-git clone https://github.com/yourusername/starknet-agent-kit.git
+git clone https://github.com/kasarlabs/starknet-agent-kit.git
+cd starknet-agent-kit
 ```
 
 2. Install dependencies:
-
 ```bash
 npm install
 ```
 
-3. Start the development server:
+3. Configure environment variables:
+Create a `.env` file:
+```env
+# Required for both package and server
+PRIVATE_KEY=""
+PUBLIC_ADDRESS=""
+AI_PROVIDER_API_KEY=""
+AI_MODEL=""  # e.g., "claude-3-5-sonnet-latest"
+AI_PROVIDER=""  # "anthropic", "openai", "gemini", or "ollama"
+RPC_URL=""
 
+# Required only for server
+API_KEY=""  # Security key for API endpoints
+PORT=3001  # Optional, defaults to 3000
+```
+
+4. Start the development server:
 ```bash
 npm run start:dev
 ```
 
-The API will be available at `http://localhost:3000/api`.
+### Server API Endpoints
 
-## API Endpoints
-
-### POST /api/agent/request
-
-Make requests to the Starknet agent.
-
-Request body:
-
-```json
-{
-  "request": "Your natural language request here"
-}
-```
-
-Headers:
-
-```
-x-api-key: your_api_key
-```
-
-## Tools
-
-All Langchain tools are available to be imported and used directly:
-
-```typescript
-import { getBalance, transfer, swapTokens } from 'starknet-agent-kit';
+#### Make Agent Requests
+```bash
+curl --location 'localhost:3001/api/agent/request' \
+--header 'x-api-key: your-api-key' \
+--header 'Content-Type: application/json' \
+--data '{
+    "request": "What's my ETH balance?"
+}'
 ```
 
 ## Testing
 
-To run tests:
-
 ```bash
+# Run unit tests
 npm run test
-```
 
-For E2E tests:
-
-```bash
+# Run end-to-end tests
 npm run test:e2e
 ```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

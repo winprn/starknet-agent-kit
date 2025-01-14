@@ -37,9 +37,11 @@ export class ConfigurationService {
     };
   }
 
-  get anthropic() {
+  get ai() {
     return {
-      apiKey: this.config.ANTHROPIC_API_KEY,
+      provider: this.config.AI_PROVIDER,
+      model: this.config.AI_MODEL,
+      apiKey: this.config.AI_PROVIDER_API_KEY,
     };
   }
 

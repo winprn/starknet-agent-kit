@@ -1,5 +1,3 @@
-// src/lib/agent/starknetAgent.ts
-
 import { IAgent } from '../../agents/interfaces/agent.interface';
 import type { AgentExecutor } from 'langchain/agents';
 import { createAgent } from './agent';
@@ -13,13 +11,16 @@ export const rpcProvider = new RpcProvider({ nodeUrl: RPC_URL });
 
 export interface StarknetAgentConfig {
   walletPrivateKey: string;
-  anthropicApiKey: string;
+  aiProviderApiKey: string;
+  aiModel: string;
+  aiProvider: string;
 }
 
 export class StarknetAgent implements IAgent {
   private readonly walletPrivateKey: string;
   private readonly AgentExecutor: AgentExecutor;
-  private readonly anthropicApiKey: string;
+  private readonly aiProviderApiKey: string;
+  private readonly aiModel: string;
 
   // New utility instances
   public readonly accountManager: AccountManager;
@@ -30,8 +31,13 @@ export class StarknetAgent implements IAgent {
     this.validateConfig(config);
 
     this.walletPrivateKey = config.walletPrivateKey;
-    this.anthropicApiKey = config.anthropicApiKey;
-    this.AgentExecutor = createAgent(this, this.anthropicApiKey);
+    this.aiProviderApiKey = config.aiProviderApiKey;
+    this.aiModel = config.aiModel;
+    this.AgentExecutor = createAgent(this, {
+      aiModel: this.aiModel,
+      apiKey: this.aiProviderApiKey,
+      aiProvider: config.aiProvider,
+    });
 
     // Initialize utility classes
     this.accountManager = new AccountManager(rpcProvider);
@@ -45,16 +51,32 @@ export class StarknetAgent implements IAgent {
         'Starknet wallet private key is required https://www.argent.xyz/argent-x'
       );
     }
-    if (!config.anthropicApiKey) {
-      throw new Error('Anthropic API key is required');
+    if (config.aiModel !== 'ollama' && !config.aiProviderApiKey) {
+      throw new Error('Ai Provider API key is required');
     }
   }
 
   getCredentials() {
     return {
       walletPrivateKey: this.walletPrivateKey,
-      anthropicApiKey: this.anthropicApiKey,
+      aiProviderApiKey: this.aiProviderApiKey,
+      aiModel: this.aiModel,
     };
+  }
+
+  async validateRequest(request: string): Promise<boolean> {
+    // Basic validation - check if request is non-empty and is a string
+    if (!request || typeof request !== 'string') {
+      return false;
+    }
+
+    try {
+      // Add your validation logic here
+      // For now, returning true as a basic implementation
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   async execute(input: string): Promise<unknown> {

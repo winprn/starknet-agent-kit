@@ -1,7 +1,6 @@
 import { Account, RpcProvider, uint256 } from 'starknet';
 import { RPC_URL, tokenAddresses } from 'src/lib/utils/constants/constant';
 
-// Types
 export interface transferParams {
   recipient_address: string;
   amount: string;
