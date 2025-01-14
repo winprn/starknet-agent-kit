@@ -36,8 +36,10 @@ import {
   verifyMessageSchema,
   simulateInvokeTransactionSchema,
   simulateDeployAccountTransactionSchema,
+  routeSchema,
 } from './schema';
 import { swapTokens } from './method/dapps/defi/avnu/swapService';
+import { getRoute } from './method/dapps/defi/avnu/fetchRouteService';
 import { getSpecVersion } from './method/rpc/getSpecVersion';
 import { getBlockWithTxHashes } from './method/rpc/getBlockWithTxHashes';
 import { getBlockWithTxs } from './method/rpc/getBlockWithTxs';
@@ -69,7 +71,7 @@ type StarknetAgentInterface = {
  * Wraps a function to inject the wallet private key from the agent
  */
 const withWalletKey = <T>(
-  fn: (params: T, privateKey: string) => Promise<any>,
+  fn: (params: T, privateKey: string) => Promise<unknown>,
   agent: StarknetAgentInterface
 ) => {
   return (params: T) => fn(params, agent.getCredentials().walletPrivateKey);
@@ -143,6 +145,12 @@ export const createTools = (agent: StarknetAgentInterface) => [
     description:
       'Swap a specified amount of one token for another token. Always return the transaction hash if successful',
     schema: swapSchema,
+  }),
+  tool(getRoute, {
+    name: 'get_route',
+    description:
+      'Get a specific route for swapping tokens. This is useful for determining the best path for a token swap.',
+    schema: routeSchema,
   }),
   tool(transfer, {
     name: 'transfer',

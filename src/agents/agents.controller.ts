@@ -24,8 +24,10 @@ export class AgentsController implements OnModuleInit {
 
   onModuleInit() {
     this.agent = new StarknetAgent({
-      anthropicApiKey: this.config.anthropic.apiKey,
+      aiProviderApiKey: this.config.ai.apiKey,
       walletPrivateKey: this.config.starknet.privateKey,
+      aiModel: this.config.ai.model,
+      aiProvider: this.config.ai.provider,
     });
   }
 
