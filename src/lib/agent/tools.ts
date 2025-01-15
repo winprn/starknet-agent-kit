@@ -11,6 +11,8 @@ import { transfer } from './method/token/transfer';
 import {
   simulateDeployAccountTransaction,
   simulateInvokeTransaction,
+  simulateDeployTransaction,
+  simulateDeclareTransaction,
 } from 'src/lib/agent/method/transaction/simulateTransaction';
 import { getOwnBalance, getBalance } from './method/read/balance';
 import { getBlockNumber } from './method/rpc/getBlockNumber';
@@ -36,6 +38,8 @@ import {
   verifyMessageSchema,
   simulateInvokeTransactionSchema,
   simulateDeployAccountTransactionSchema,
+  simulateDeployTransactionSchema,
+  simulateDeclareTransactionSchema,
   routeSchema,
 } from './schema';
 import { swapTokens } from './method/dapps/defi/avnu/swapService';
@@ -253,7 +257,6 @@ export const createTools = (agent: StarknetAgentInterface) => [
     description: 'Declare a new contract on Starknet',
     schema: declareContractSchema,
   }),
-
   tool(withWalletKey(estimateAccountDeployFee, agent), {
     name: 'estimate_account_deploy_fee',
     description: 'Estimate the fee required to deploy an account',
@@ -280,5 +283,15 @@ export const createTools = (agent: StarknetAgentInterface) => [
     name: 'simulate_deploy_account_transaction',
     description: 'Simulate Deploy Account transaction without executing it',
     schema: simulateDeployAccountTransactionSchema,
+  }),
+  tool(withWalletKey(simulateDeployTransaction, agent), {
+    name: 'simulate_deploy_transaction',
+    description: 'Simulate Deploy transaction without executing it',
+    schema: simulateDeployTransactionSchema,
+  }),
+  tool(withWalletKey(simulateDeclareTransaction, agent), {
+    name: 'simulate_declare_transaction',
+    description: 'Simulate Deploy transaction without executing it',
+    schema: simulateDeclareTransactionSchema,
   }),
 ];

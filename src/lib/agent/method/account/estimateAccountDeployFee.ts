@@ -1,11 +1,7 @@
-import { Account, EstimateFee, constants } from 'starknet';
 import { rpcProvider } from 'src/lib/agent/starknetAgent';
+import { Account, DeployAccountContractPayload } from 'starknet';
 
-export type EstimateAccountDeployFeeParams = {
-  classHash: string;
-  constructorCalldata?: string[];
-  addressSalt?: string;
-};
+import { EstimateAccountDeployFeeParams } from 'src/lib/utils/types/estimate';
 
 export const estimateAccountDeployFee = async (
   params: EstimateAccountDeployFeeParams,
@@ -19,14 +15,18 @@ export const estimateAccountDeployFee = async (
 
     const account = new Account(rpcProvider, accountAddress, privateKey);
 
-    // Estimate fee for deployment
-    const estimatedFee = await account.estimateAccountDeployFee({
-      classHash: params.classHash,
-      constructorCalldata: params.constructorCalldata || [],
-      addressSalt: params.addressSalt || '0x0',
-      contractAddress: constants.ZERO.toString(),
-    });
+    const invocations: DeployAccountContractPayload[] = params.payloads.map(
+      (payload) => {
+        return {
+          classHash: payload.classHash,
+          constructorCalldata: payload.constructorCalldata ?? [],
+          addressSalt: payload.addressSalt,
+          contractAddress: payload.contractAddress,
+        };
+      }
+    );
 
+    const estimatedFee = await account.estimateAccountDeployFee(invocations[0]);
     return JSON.stringify({
       status: 'success',
       maxFee: estimatedFee.suggestedMaxFee.toString(),

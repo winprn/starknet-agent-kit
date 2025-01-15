@@ -1,23 +1,19 @@
+import { rpcProvider } from 'src/lib/agent/starknetAgent';
+import { Account, TransactionType } from 'starknet';
 import {
-  Account,
-  Call,
-  TransactionType,
-  DeployAccountContractPayload,
-} from 'starknet';
-import { rpcProvider } from '../../starknetAgent';
-import { colorLog } from 'src/lib/utils/Output/console_log';
-import {
-  Invocation_Deploy_Account,
   Invocation_Invoke,
+  Invocation_Deploy_Account,
+  SimulateDeployTransactionAccountParams,
+  SimulateInvokeTransactionParams,
+  SimulateDeployTransactionParams,
+  Invocation_Deploy,
+  SimulateDeclareTransactionAccountParams,
 } from 'src/lib/utils/types/simulatetransaction';
-
-export type simulateInvokeTransactionParams = {
-  accountAddress: string;
-  calls: Call[];
-};
+import { TransactionReponseFormat } from 'src/lib/utils/Output/output_simulatetransaction';
+import { DEFAULT_NONCE } from 'src/lib/utils/constants/contract';
 
 export const simulateInvokeTransaction = async (
-  params: simulateInvokeTransactionParams,
+  params: SimulateInvokeTransactionParams,
   privateKey: string
 ) => {
   try {
@@ -28,71 +24,25 @@ export const simulateInvokeTransaction = async (
 
     const account = new Account(rpcProvider, accountAddress, privateKey);
 
-    const invocations: Invocation_Invoke[] = params.calls.map((call, index) => {
-      colorLog.info(`\n--- Call ${index + 1} ---`);
-      colorLog.info(`Contract Address: ${call.contractAddress}`);
-      colorLog.info(`Entrypoint: ${call.entrypoint}`);
-      colorLog.info('Calldata:');
-
-      if (Array.isArray(call.calldata)) {
-        call.calldata.forEach((data: unknown, dataIndex: number) => {
-          colorLog.info(`  Param ${dataIndex + 1}: ${data}`);
-        });
-      }
-
+    const invocations: Invocation_Invoke[] = params.payloads.map((payload) => {
       return {
         type: TransactionType.INVOKE,
         payload: {
-          contractAddress: call.contractAddress,
-          entrypoint: call.entrypoint,
-          calldata: call.calldata as string[],
+          contractAddress: payload.contractAddress,
+          entrypoint: payload.entrypoint,
+          calldata: payload.calldata as string[],
         },
       };
     });
 
     const simulate_transaction = await account.simulateTransaction(invocations);
 
-    colorLog.success('Simulation is succesfull !');
-    colorLog.info('Simulation response:');
-    const transactionDetails = simulate_transaction.map(
-      (transaction, index) => {
-        const feeData = transaction.fee_estimation;
-        const resourceBounds = transaction.resourceBounds;
+    const transaction_output = TransactionReponseFormat(simulate_transaction);
 
-        return {
-          transaction_number: index + 1,
-
-          fee_estimation: {
-            title: 'Fee Estimation Breakdown',
-            details: {
-              ...feeData,
-            },
-          },
-
-          resource_bounds: {
-            l1_gas: {
-              max_amount: resourceBounds.l1_gas.max_amount,
-              max_price_per_unit: resourceBounds.l1_gas.max_price_per_unit,
-            },
-            l2_gas: {
-              max_amount: resourceBounds.l2_gas.max_amount,
-              max_price_per_unit: resourceBounds.l2_gas.max_price_per_unit,
-            },
-          },
-
-          suggested_max_fee: transaction.suggestedMaxFee.toString(),
-        };
-      }
-    );
-    console.log(JSON.stringify(transactionDetails, null, 2));
-    return JSON.stringify(
-      {
-        status: 'success',
-        transaction_details: transactionDetails,
-      },
-      null,
-      2
-    );
+    return JSON.stringify({
+      status: 'success',
+      transaction_output: transaction_output,
+    });
   } catch (error) {
     return JSON.stringify({
       status: 'failure',
@@ -101,13 +51,8 @@ export const simulateInvokeTransaction = async (
   }
 };
 
-export type simulateDeployTransactionAccountParams = {
-  accountAddress: string;
-  payloads: DeployAccountContractPayload[];
-};
-
 export const simulateDeployAccountTransaction = async (
-  params: simulateDeployTransactionAccountParams,
+  params: SimulateDeployTransactionAccountParams,
   privateKey: string
 ) => {
   try {
@@ -120,12 +65,6 @@ export const simulateDeployAccountTransaction = async (
 
     const invocations: Invocation_Deploy_Account[] = params.payloads.map(
       (payload) => {
-        if (Array.isArray(payload.constructorCalldata)) {
-          payload.constructorCalldata.forEach((data, dataIndex) => {
-            console.log(`  Param ${dataIndex + 1}:`, data);
-          });
-        }
-
         return {
           type: TransactionType.DEPLOY_ACCOUNT,
           payload: {
@@ -141,53 +80,94 @@ export const simulateDeployAccountTransaction = async (
     const simulate_transaction = await account.simulateTransaction(
       invocations,
       {
-        nonce: '0x0',
+        nonce: DEFAULT_NONCE,
       }
     );
+    const transaction_output = TransactionReponseFormat(simulate_transaction);
 
-    colorLog.success('Simulation is succesfull !');
+    return JSON.stringify({
+      status: 'success',
+      transaction_output: transaction_output,
+    });
+  } catch (error) {
+    return JSON.stringify({
+      status: 'failure',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
+  }
+};
 
-    colorLog.info('Simulation response:');
-    const transactionDetails = simulate_transaction.map(
-      (transaction, index) => {
-        const feeData = transaction.fee_estimation;
-        const resourceBounds = transaction.resourceBounds;
+export const simulateDeployTransaction = async (
+  params: SimulateDeployTransactionParams,
+  privateKey: string
+) => {
+  try {
+    const accountAddress = process.env.PUBLIC_ADDRESS;
+    if (!accountAddress) {
+      throw new Error('Account address not configured');
+    }
 
-        return {
-          transaction_number: index + 1,
+    const account = new Account(rpcProvider, accountAddress, privateKey);
 
-          fee_estimation: {
-            title: 'Fee Estimation Breakdown',
-            details: {
-              ...feeData,
-            },
-          },
+    const invocations: Invocation_Deploy[] = params.payloads.map((payload) => {
+      return {
+        type: TransactionType.DEPLOY,
+        payload: {
+          classHash: payload.classHash,
+          salt: payload.salt,
+          constructorCalldata: payload.constructorCalldata,
+          unique: payload.unique,
+        },
+      };
+    });
 
-          resource_bounds: {
-            l1_gas: {
-              max_amount: resourceBounds.l1_gas.max_amount,
-              max_price_per_unit: resourceBounds.l1_gas.max_price_per_unit,
-            },
-            l2_gas: {
-              max_amount: resourceBounds.l2_gas.max_amount,
-              max_price_per_unit: resourceBounds.l2_gas.max_price_per_unit,
-            },
-          },
+    const simulate_transaction = await account.simulateTransaction(invocations);
 
-          suggested_max_fee: transaction.suggestedMaxFee.toString(),
-        };
-      }
-    );
+    const transaction_output = TransactionReponseFormat(simulate_transaction);
 
-    console.log(JSON.stringify(transactionDetails, null, 2));
-    return JSON.stringify(
+    return JSON.stringify({
+      status: 'success',
+      transaction_output: transaction_output,
+    });
+  } catch (error) {
+    return JSON.stringify({
+      status: 'failure',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
+  }
+};
+
+export const simulateDeclareTransaction = async (
+  params: SimulateDeclareTransactionAccountParams,
+  privateKey: string
+) => {
+  try {
+    const accountAddress = process.env.PUBLIC_ADDRESS;
+    if (!accountAddress) {
+      throw new Error('Account address not configured');
+    }
+
+    const account = new Account(rpcProvider, accountAddress, privateKey);
+
+    const invocations = [
       {
-        status: 'success',
-        transaction_details: transactionDetails,
+        type: TransactionType.DECLARE as const,
+        payload: {
+          contract: params.contract,
+          classHash: params.classHash,
+          casm: params.casm,
+          compiledClassHash: params.compiledClassHash,
+        },
       },
-      null,
-      2
-    );
+    ];
+
+    const simulate_transaction = await account.simulateTransaction(invocations);
+    const transaction_output = TransactionReponseFormat(simulate_transaction);
+
+    return JSON.stringify({
+      status: 'success',
+      transaction_output: transaction_output,
+    });
   } catch (error) {
     return JSON.stringify({
       status: 'failure',
