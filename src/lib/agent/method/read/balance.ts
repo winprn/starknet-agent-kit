@@ -5,6 +5,7 @@ import {
   GetOwnBalanceParams,
   GetBalanceParams,
 } from 'src/lib/utils/types/balance';
+
 const provider = new RpcProvider({ nodeUrl: RPC_URL });
 
 const getTokenDecimals = (symbol: string): number => {
@@ -63,6 +64,8 @@ export const getOwnBalance = async (
 
 export const getBalance = async (params: GetBalanceParams) => {
   try {
+    console.log(RPC_URL, provider);
+    console.log(params);
     const tokenAddress = tokenAddresses[params.assetSymbol];
     if (!tokenAddress) {
       throw new Error(`Token ${params.assetSymbol} not supported`);
@@ -70,6 +73,7 @@ export const getBalance = async (params: GetBalanceParams) => {
 
     const tokenContract = new Contract(ERC20_ABI, tokenAddress, provider);
     const balance = await tokenContract.balanceOf(params.walletAddress);
+    console.log('it work');
     const formattedBalance = formatBalance(
       balance.balance.toString(),
       params.assetSymbol
