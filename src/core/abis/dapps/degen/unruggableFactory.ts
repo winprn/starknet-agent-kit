@@ -1,12 +1,12 @@
-export const factoryAbi = [
+export const FACTORY_ABI = [
   {
-    name: 'FactoryImpl',
     type: 'impl',
+    name: 'FactoryImpl',
     interface_name: 'unruggable::factory::interface::IFactory',
   },
   {
-    name: 'core::integer::u256',
     type: 'struct',
+    name: 'core::integer::u256',
     members: [
       {
         name: 'low',
@@ -19,8 +19,8 @@ export const factoryAbi = [
     ],
   },
   {
-    name: 'core::array::Span::<core::starknet::contract_address::ContractAddress>',
     type: 'struct',
+    name: 'core::array::Span::<core::starknet::contract_address::ContractAddress>',
     members: [
       {
         name: 'snapshot',
@@ -29,8 +29,8 @@ export const factoryAbi = [
     ],
   },
   {
-    name: 'core::array::Span::<core::integer::u256>',
     type: 'struct',
+    name: 'core::array::Span::<core::integer::u256>',
     members: [
       {
         name: 'snapshot',
@@ -39,8 +39,8 @@ export const factoryAbi = [
     ],
   },
   {
-    name: 'unruggable::factory::LaunchParameters',
     type: 'struct',
+    name: 'unruggable::factory::LaunchParameters',
     members: [
       {
         name: 'memecoin_address',
@@ -69,8 +69,8 @@ export const factoryAbi = [
     ],
   },
   {
-    name: 'core::bool',
     type: 'enum',
+    name: 'core::bool',
     variants: [
       {
         name: 'False',
@@ -83,8 +83,8 @@ export const factoryAbi = [
     ],
   },
   {
-    name: 'ekubo::types::i129::i129',
     type: 'struct',
+    name: 'ekubo::types::i129::i129',
     members: [
       {
         name: 'mag',
@@ -97,8 +97,8 @@ export const factoryAbi = [
     ],
   },
   {
-    name: 'unruggable::exchanges::ekubo::ekubo_adapter::EkuboPoolParameters',
     type: 'struct',
+    name: 'unruggable::exchanges::ekubo::ekubo_adapter::EkuboPoolParameters',
     members: [
       {
         name: 'fee',
@@ -119,8 +119,8 @@ export const factoryAbi = [
     ],
   },
   {
-    name: 'ekubo::types::keys::PoolKey',
     type: 'struct',
+    name: 'ekubo::types::keys::PoolKey',
     members: [
       {
         name: 'token0',
@@ -145,8 +145,8 @@ export const factoryAbi = [
     ],
   },
   {
-    name: 'ekubo::types::bounds::Bounds',
     type: 'struct',
+    name: 'ekubo::types::bounds::Bounds',
     members: [
       {
         name: 'lower',
@@ -159,8 +159,8 @@ export const factoryAbi = [
     ],
   },
   {
-    name: 'unruggable::exchanges::ekubo::launcher::EkuboLP',
     type: 'struct',
+    name: 'unruggable::exchanges::ekubo::launcher::EkuboLP',
     members: [
       {
         name: 'owner',
@@ -181,8 +181,8 @@ export const factoryAbi = [
     ],
   },
   {
-    name: 'unruggable::exchanges::SupportedExchanges',
     type: 'enum',
+    name: 'unruggable::exchanges::SupportedExchanges',
     variants: [
       {
         name: 'Jediswap',
@@ -199,8 +199,8 @@ export const factoryAbi = [
     ],
   },
   {
-    name: 'unruggable::token::memecoin::LiquidityType',
     type: 'enum',
+    name: 'unruggable::token::memecoin::LiquidityType',
     variants: [
       {
         name: 'JediERC20',
@@ -217,8 +217,8 @@ export const factoryAbi = [
     ],
   },
   {
-    name: 'core::option::Option::<(core::starknet::contract_address::ContractAddress, unruggable::token::memecoin::LiquidityType)>',
     type: 'enum',
+    name: 'core::option::Option::<(core::starknet::contract_address::ContractAddress, unruggable::token::memecoin::LiquidityType)>',
     variants: [
       {
         name: 'Some',
@@ -231,12 +231,12 @@ export const factoryAbi = [
     ],
   },
   {
-    name: 'unruggable::factory::interface::IFactory',
     type: 'interface',
+    name: 'unruggable::factory::interface::IFactory',
     items: [
       {
-        name: 'create_memecoin',
         type: 'function',
+        name: 'create_memecoin',
         inputs: [
           {
             name: 'owner',
@@ -267,8 +267,8 @@ export const factoryAbi = [
         state_mutability: 'external',
       },
       {
-        name: 'launch_on_jediswap',
         type: 'function',
+        name: 'launch_on_jediswap',
         inputs: [
           {
             name: 'launch_parameters',
@@ -291,8 +291,8 @@ export const factoryAbi = [
         state_mutability: 'external',
       },
       {
-        name: 'launch_on_ekubo',
         type: 'function',
+        name: 'launch_on_ekubo',
         inputs: [
           {
             name: 'launch_parameters',
@@ -311,8 +311,8 @@ export const factoryAbi = [
         state_mutability: 'external',
       },
       {
-        name: 'launch_on_starkdefi',
         type: 'function',
+        name: 'launch_on_starkdefi',
         inputs: [
           {
             name: 'launch_parameters',
@@ -335,8 +335,8 @@ export const factoryAbi = [
         state_mutability: 'external',
       },
       {
-        name: 'exchange_address',
         type: 'function',
+        name: 'exchange_address',
         inputs: [
           {
             name: 'exchange',
@@ -351,8 +351,8 @@ export const factoryAbi = [
         state_mutability: 'view',
       },
       {
-        name: 'locked_liquidity',
         type: 'function',
+        name: 'locked_liquidity',
         inputs: [
           {
             name: 'token',
@@ -367,8 +367,8 @@ export const factoryAbi = [
         state_mutability: 'view',
       },
       {
-        name: 'is_memecoin',
         type: 'function',
+        name: 'is_memecoin',
         inputs: [
           {
             name: 'address',
@@ -383,8 +383,8 @@ export const factoryAbi = [
         state_mutability: 'view',
       },
       {
-        name: 'ekubo_core_address',
         type: 'function',
+        name: 'ekubo_core_address',
         inputs: [],
         outputs: [
           {
@@ -396,8 +396,8 @@ export const factoryAbi = [
     ],
   },
   {
-    name: 'core::array::Span::<(unruggable::exchanges::SupportedExchanges, core::starknet::contract_address::ContractAddress)>',
     type: 'struct',
+    name: 'core::array::Span::<(unruggable::exchanges::SupportedExchanges, core::starknet::contract_address::ContractAddress)>',
     members: [
       {
         name: 'snapshot',
@@ -406,8 +406,8 @@ export const factoryAbi = [
     ],
   },
   {
-    name: 'core::array::Span::<(core::starknet::contract_address::ContractAddress, core::starknet::contract_address::ContractAddress)>',
     type: 'struct',
+    name: 'core::array::Span::<(core::starknet::contract_address::ContractAddress, core::starknet::contract_address::ContractAddress)>',
     members: [
       {
         name: 'snapshot',
@@ -416,8 +416,8 @@ export const factoryAbi = [
     ],
   },
   {
-    name: 'constructor',
     type: 'constructor',
+    name: 'constructor',
     inputs: [
       {
         name: 'memecoin_class_hash',
@@ -438,73 +438,73 @@ export const factoryAbi = [
     ],
   },
   {
-    kind: 'struct',
-    name: 'unruggable::factory::factory::Factory::MemecoinCreated',
     type: 'event',
+    name: 'unruggable::factory::factory::Factory::MemecoinCreated',
+    kind: 'struct',
     members: [
       {
-        kind: 'data',
         name: 'owner',
         type: 'core::starknet::contract_address::ContractAddress',
+        kind: 'data',
       },
       {
-        kind: 'data',
         name: 'name',
         type: 'core::felt252',
+        kind: 'data',
       },
       {
-        kind: 'data',
         name: 'symbol',
         type: 'core::felt252',
+        kind: 'data',
       },
       {
-        kind: 'data',
         name: 'initial_supply',
         type: 'core::integer::u256',
+        kind: 'data',
       },
       {
-        kind: 'data',
         name: 'memecoin_address',
         type: 'core::starknet::contract_address::ContractAddress',
+        kind: 'data',
       },
     ],
   },
   {
-    kind: 'struct',
-    name: 'unruggable::factory::factory::Factory::MemecoinLaunched',
     type: 'event',
+    name: 'unruggable::factory::factory::Factory::MemecoinLaunched',
+    kind: 'struct',
     members: [
       {
-        kind: 'data',
         name: 'memecoin_address',
         type: 'core::starknet::contract_address::ContractAddress',
+        kind: 'data',
       },
       {
-        kind: 'data',
         name: 'quote_token',
         type: 'core::starknet::contract_address::ContractAddress',
+        kind: 'data',
       },
       {
-        kind: 'data',
         name: 'exchange_name',
         type: 'core::felt252',
+        kind: 'data',
       },
     ],
   },
   {
-    kind: 'enum',
-    name: 'unruggable::factory::factory::Factory::Event',
     type: 'event',
+    name: 'unruggable::factory::factory::Factory::Event',
+    kind: 'enum',
     variants: [
       {
-        kind: 'nested',
         name: 'MemecoinCreated',
         type: 'unruggable::factory::factory::Factory::MemecoinCreated',
+        kind: 'nested',
       },
       {
-        kind: 'nested',
         name: 'MemecoinLaunched',
         type: 'unruggable::factory::factory::Factory::MemecoinLaunched',
+        kind: 'nested',
       },
     ],
   },

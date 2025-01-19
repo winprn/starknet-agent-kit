@@ -1,4 +1,3 @@
-import { RPC_URL } from 'src/lib/utils/constants/constant';
 import {
   argentx_classhash,
   DEFAULT_GUARDIAN,
@@ -10,27 +9,25 @@ import {
   CallData,
   TransactionFinalityStatus,
 } from 'starknet';
-import { StarknetAgent } from 'src/lib/agent/starknetAgent';
 import { AccountDetails } from 'src/lib/utils/types';
 import {
   DeployOZAccountParams,
   DeployArgentParams,
 } from 'src/lib/utils/types/deployaccount';
+import { StarknetAgentInterface } from 'src/lib/agent/tools';
 
-const provider = new RpcProvider({ nodeUrl: RPC_URL });
-
-export const DeployOZAccount = async (params: DeployOZAccountParams) => {
+export const DeployOZAccount = async (
+  agent: StarknetAgentInterface,
+  params: DeployOZAccountParams
+) => {
   try {
-    const agent = new StarknetAgent({
-      walletPrivateKey: process.env.PRIVATE_KEY,
-      aiProviderApiKey: process.env.AI_PROVIDER_API_KEY,
-      aiModel: process.env.AI_MODEL,
-      aiProvider: process.env.AI_PROVIDER,
-    });
-
+    const provider = agent.getProvider();
+    const accountCredentials = agent.getAccountCredentials();
+    const accountAddress = accountCredentials?.accountPublicKey;
+    const accountPrivateKey = accountCredentials?.accountPrivateKey;
     const accountDetails: AccountDetails = {
-      publicKey: params.publicKey,
-      privateKey: params.privateKey,
+      publicKey: accountAddress,
+      privateKey: accountPrivateKey,
       address: '',
       deployStatus: false,
     };
@@ -68,7 +65,12 @@ export const DeployOZAccount = async (params: DeployOZAccountParams) => {
   }
 };
 
-export const DeployArgentAccount = async (params: DeployArgentParams) => {
+export const DeployArgentAccount = async (
+  agent: StarknetAgentInterface,
+  params: DeployArgentParams
+) => {
+  const provider = agent.getProvider();
+
   try {
     const argentXaccountClassHash = argentx_classhash;
 

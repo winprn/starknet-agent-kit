@@ -1,8 +1,9 @@
 import { IsNotEmpty } from 'class-validator';
+import { StarknetAgentInterface } from 'src/lib/agent/tools';
 
 export class CreateAgentDTO {
   @IsNotEmpty()
-  walletPrivateKey: string;
+  accountagent: StarknetAgentInterface;
   @IsNotEmpty()
   anthropicApiKey: string;
   @IsNotEmpty()

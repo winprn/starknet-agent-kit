@@ -1,6 +1,7 @@
 import { fetchQuotes, QuoteRequest, Quote, Route } from '@avnu/avnu-sdk';
 import { TokenService } from './tokenService';
 import { z } from 'zod';
+import { StarknetAgentInterface } from 'src/lib/agent/tools';
 
 export const routeSchema = z.object({
   sellTokenSymbol: z
@@ -32,7 +33,12 @@ export class RouteFetchService {
     await this.tokenService.initializeTokens();
   }
 
-  async fetchRoute(params: RouteSchemaType): Promise<RouteResult> {
+  async fetchRoute(
+    params: RouteSchemaType,
+    agent: StarknetAgentInterface
+  ): Promise<RouteResult> {
+    const accountAddress = agent.getAccountCredentials()?.accountPublicKey;
+
     try {
       await this.initialize();
 
@@ -47,7 +53,7 @@ export class RouteFetchService {
         sellTokenAddress: sellToken.address,
         buyTokenAddress: buyToken.address,
         sellAmount: formattedAmount,
-        takerAddress: process.env.PUBLIC_ADDRESS!,
+        takerAddress: accountAddress,
         size: 1,
       };
 
@@ -86,8 +92,19 @@ export class RouteFetchService {
 }
 
 export const getRoute = async (
+  agent: StarknetAgentInterface,
   params: RouteSchemaType
 ): Promise<RouteResult> => {
-  const routeService = new RouteFetchService();
-  return routeService.fetchRoute(params);
+  try {
+    const tokenService = new TokenService();
+    await tokenService.initializeTokens();
+    const routeService = new RouteFetchService();
+    return routeService.fetchRoute(params, agent);
+  } catch (error) {
+    console.error('Route fetching error:', error);
+    return {
+      status: 'failure',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
 };

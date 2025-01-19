@@ -1,5 +1,6 @@
-import { Account, RpcProvider, uint256 } from 'starknet';
-import { RPC_URL, tokenAddresses } from 'src/lib/utils/constants/constant';
+import { Account, uint256 } from 'starknet';
+import { tokenAddresses } from 'src/core/constants/tokens/erc20';
+import { StarknetAgentInterface } from 'src/lib/agent/tools';
 
 export interface transferParams {
   recipient_address: string;
@@ -38,36 +39,34 @@ const formatTokenAmount = (amount: string, decimals: number): string => {
 
 /**
  * Transfers ERC20 tokens on Starknet
+ * @param agent The agent performing the transfer
  * @param params transfer parameters including recipient, amount, and token symbol
  * @returns Result of the transfer operation
  */
-export const transfer = async (params: transferParams): Promise<string> => {
+export const transfer = async (
+  agent: StarknetAgentInterface,
+  params: transferParams
+): Promise<string> => {
   try {
-    // Environment validation
-    const privateKey = process.env.PRIVATE_KEY;
-    const accountAddress = process.env.PUBLIC_ADDRESS;
+    const credentials = agent.getAccountCredentials();
+    const provider = agent.getProvider();
 
-    if (!privateKey || !accountAddress) {
-      throw new Error('PRIVATE_KEY or PUBLIC_ADDRESS not set in .env file');
-    }
+    const account = new Account(
+      provider,
+      credentials.accountPublicKey,
+      credentials.accountPrivateKey
+    );
 
-    // Provider and account setup
-    const provider = new RpcProvider({ nodeUrl: RPC_URL });
-    const account = new Account(provider, accountAddress, privateKey);
-
-    // Token validation and setup
     const tokenAddress = tokenAddresses[params.symbol];
     if (!tokenAddress) {
       throw new Error(`Token ${params.symbol} not supported`);
     }
 
-    // Amount formatting
     const decimals =
       DECIMALS[params.symbol as keyof typeof DECIMALS] || DECIMALS.DEFAULT;
     const formattedAmount = formatTokenAmount(params.amount, decimals);
     const amountUint256 = uint256.bnToUint256(formattedAmount);
 
-    // Execute transfer
     const result = await account.execute({
       contractAddress: tokenAddress,
       entrypoint: 'transfer',
@@ -83,7 +82,6 @@ export const transfer = async (params: transferParams): Promise<string> => {
       result.transaction_hash
     );
 
-    // Wait for transaction confirmation
     await provider.waitForTransaction(result.transaction_hash);
 
     const transferResult: TransferResult = {

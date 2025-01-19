@@ -1,11 +1,16 @@
 import { BlockIdParams } from 'src/lib/agent/schema';
-import { rpcProvider } from 'src/lib/agent/starknetAgent';
+import { StarknetAgentInterface } from 'src/lib/agent/tools';
 
-export const getBlockTransactionsTraces = async (params: BlockIdParams) => {
+export const getBlockTransactionsTraces = async (
+  agent: StarknetAgentInterface,
+  params: BlockIdParams
+) => {
+  const provider = agent.getProvider();
+
   try {
     const { blockId } = params;
     const transactionTraces =
-      await rpcProvider.getBlockTransactionsTraces(blockId);
+      await provider.getBlockTransactionsTraces(blockId);
     return JSON.stringify({
       status: 'success',
       transactionTraces,

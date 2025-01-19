@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import MarkdownIt from 'markdown-it';
+const md = new MarkdownIt({ breaks: true });
 
 interface AgentResponse {
   text: string;
@@ -155,15 +157,30 @@ const StarknetAgent = () => {
   const formatResponse = (jsonString: string) => {
     try {
       const data = JSON.parse(jsonString);
-      if (data.data?.output?.[0]?.text) {
-        const cleanText = data.data.output[0].text
-          .replace(/\{"input":.*?"output":\[.*?"text":"|"\]\}$/g, '')
-          .replace(/\\n/g, '\n')
-          .replace(/\\"/g, '"');
-        return cleanText;
+
+      // Extract the text content from the response
+      let extractedText = '';
+
+      // Handle the result structure from your backend
+      if (data.result?.output?.[0]?.text) {
+        extractedText = data.result.output[0].text;
       }
-      return jsonString;
-    } catch {
+      // Handle direct output structure
+      else if (data.output?.[0]?.text) {
+        extractedText = data.output[0].text;
+      }
+      // Handle direct text
+      else if (typeof data === 'string') {
+        extractedText = data;
+      }
+
+      // Clean up extra newlines and whitespace
+      extractedText = extractedText.trim();
+
+      // Convert markdown to HTML
+      return md.render(extractedText);
+    } catch (error) {
+      console.error('Error formatting response:', error);
       return jsonString;
     }
   };
@@ -212,28 +229,41 @@ const StarknetAgent = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': 'test',
+          'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
         },
         body: JSON.stringify({ request: input }),
+        credentials: 'include',
       });
 
+      // Ajout d'un meilleur logging des erreurs
       if (!response.ok) {
-        throw new Error(`Server error: ${response.status}`);
+        const errorText = await response.text();
+        console.error('API Error:', {
+          status: response.status,
+          statusText: response.statusText,
+          body: errorText,
+        });
+        throw new Error(errorText);
       }
 
       const data = await response.json();
+
+      // Validation de la structure de données
+      if (!data || typeof data !== 'object') {
+        throw new Error('Invalid response format from server');
+      }
+
       const formattedText = formatResponse(JSON.stringify(data));
       typeResponse({ ...newResponse, text: formattedText });
     } catch (error) {
-      console.error('Error details:', error);
+      console.error('Request error:', error);
+
       const errorMessage =
-        process.env.NODE_ENV === 'development'
-          ? `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
-          : 'Sorry, there was an error processing your request. Please try again.';
+        error instanceof Error ? error.message : 'An unexpected error occurred';
 
       typeResponse({
         ...newResponse,
-        text: errorMessage,
+        text: `Error: ${errorMessage}\nPlease try again or contact support if the issue persists.`,
       });
     } finally {
       setIsLoading(false);
