@@ -140,6 +140,7 @@ export const transfer_signature = async (input: {
           DECIMALS[payload.symbol as keyof typeof DECIMALS] || DECIMALS.DEFAULT;
         const formattedAmount = formatTokenAmount(payload.amount, decimals);
         const amountUint256 = uint256.bnToUint256(formattedAmount);
+
         return {
           status: 'success',
           transactions: {
