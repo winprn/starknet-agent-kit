@@ -41,6 +41,8 @@ import {
   getClassAtSchema,
   getClassHashAtSchema,
   Transferschema,
+  depositEarnSchema,
+  withdrawEarnSchema,
 } from '../schemas/schema';
 import { swapTokens } from '../plugins/avnu/actions/swap';
 import { getRoute } from '../plugins/avnu/actions/fetchRoute';
@@ -63,6 +65,8 @@ import {
   GetBalanceParams,
   GetOwnBalanceParams,
 } from '../plugins/core/token/types/balance';
+import { withdrawEarnPosition } from '../methods/vesu/actions/withdrawService';
+import { depositEarnPosition } from '../methods/vesu/actions/depositService';
 
 export interface StarknetAgentInterface {
   getAccountCredentials: () => {
@@ -338,6 +342,20 @@ export const registerTools = () => {
     description: 'Get locked liquidity info for token',
     schema: contractAddressSchema,
     execute: getLockedLiquidity,
+  });
+
+  StarknetToolRegistry.registerTool({
+    name: 'deposit',
+    description: 'Deposit asset into Earn position on Vesu',
+    schema: depositEarnSchema,
+    execute: depositEarnPosition,
+  });
+
+  StarknetToolRegistry.registerTool({
+    name: 'withdraw',
+    description: 'Withdraw total amount asset from Earn position on Vesu',
+    schema: withdrawEarnSchema,
+    execute: withdrawEarnPosition,
   });
 };
 registerTools();
