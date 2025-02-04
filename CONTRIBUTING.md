@@ -23,7 +23,7 @@ The Starknet Agent Kit is organized with the following structure:
 │   ├── agents/            # Agent system implementation
 │   ├── common/            # Shared utilities and error handling
 │   ├── config/            # Configuration management
-│   ├── lib/              
+│   ├── lib/
 │   │   ├── agent/         # Core agent functionality (START HERE)
 │   │   │   ├── plugins/   # Protocol-specific implementations
 │   │   │   │   ├── core/  # Core functionality (RPC, accounts, etc.)
@@ -39,17 +39,20 @@ The Starknet Agent Kit is organized with the following structure:
 ## Getting Started
 
 1. Fork and clone the repository:
+
 ```bash
 git clone https://github.com/kasarlabs/starknet-agent-kit.git
 cd starknet-agent-kit
 ```
 
 2. Install dependencies:
+
 ```bash
 pnpm install
 ```
 
 3. Set up your environment variables:
+
 ```bash
 cp .env.example .env
 ```
@@ -66,25 +69,28 @@ API_KEY="your_api_key_for_endpoints"
 ```
 
 4. Start the development environment:
+
 ```bash
 pnpm dev
 ```
 
 ## Development Workflow
 
-1. **Create a new branch** following the convention:  
+1. **Create a new branch** following the convention:
+
    ```bash
    git checkout -b feat/scope-your-feature
    ```
 
 2. **Make your changes** while following project guidelines.
 
-3. **Commit using conventional commits**:  
+3. **Commit using conventional commits**:
+
    ```bash
    git commit -m "feat(scope): add new feature"
    ```
 
-4. **Push your changes and create a pull request**:  
+4. **Push your changes and create a pull request**:
    ```bash
    git push origin feat/scope-your-feature
    ```
@@ -94,6 +100,7 @@ pnpm dev
 ### Adding a New Protocol Integration
 
 1. Create a new directory under `src/lib/agent/plugins/`:
+
 ```
 src/lib/agent/plugins/your-protocol/
 ├── abis/         # Protocol-specific ABIs
@@ -117,10 +124,11 @@ src/lib/agent/plugins/your-protocol/
 4. Register the action in the registry
 
 Example:
+
 ```typescript
 StarknetToolRegistry.registerTool({
-  name: "your_action_name",
-  description: "Description of what your action does",
+  name: 'your_action_name',
+  description: 'Description of what your action does',
   schema: yourActionSchema,
   execute: youractionFunction,
 });
@@ -140,14 +148,16 @@ Follow [this documentation](https://docs.kasar.io/add-agent-actions) for more in
 ## Testing
 
 1. Run tests:
+
 ```bash
 pnpm test
 ```
 
 2. Write tests for new features:
+
 ```typescript
-describe("YourFeature", () => {
-  it("should work as expected", async () => {
+describe('YourFeature', () => {
+  it('should work as expected', async () => {
     // Your test implementation
   });
 });
@@ -163,16 +173,19 @@ describe("YourFeature", () => {
 ## Best Practices
 
 ### Error Handling
+
 - Use the provided error classes in `common/errors/`
 - Always return properly formatted JSON responses
 - Include appropriate error messages and types
 
 ### Input Validation
+
 - Use Zod schemas for all inputs
 - Include descriptive schema messages
 - Handle edge cases appropriately
 
 ### Code Style
+
 - Use meaningful variable and function names
 - Keep functions focused and single-purpose
 - Comment complex logic
@@ -181,6 +194,7 @@ describe("YourFeature", () => {
 ## Getting Help
 
 If you're stuck or have questions:
+
 1. Check existing issues and pull requests
 2. Create a new issue with a detailed description
 3. Tag appropriate maintainers
