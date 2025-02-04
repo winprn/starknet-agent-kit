@@ -41,6 +41,8 @@ import {
   getClassAtSchema,
   getClassHashAtSchema,
   Transferschema,
+  depositEarnSchema,
+  withdrawEarnSchema,
 } from '../schemas/schema';
 import { swapTokens } from '../plugins/avnu/actions/swap';
 import { getRoute } from '../plugins/avnu/actions/fetchRoute';
@@ -63,6 +65,8 @@ import {
   GetBalanceParams,
   GetOwnBalanceParams,
 } from '../plugins/core/token/types/balance';
+import { withdrawEarnPosition } from '../methods/vesu/actions/withdrawService';
+import { depositEarnPosition } from '../methods/vesu/actions/depositService';
 
 export interface StarknetAgentInterface {
   getAccountCredentials: () => {
@@ -90,11 +94,6 @@ interface StarknetTool<P = any> {
   execute: (agent: StarknetAgentInterface, params: P) => Promise<unknown>;
 }
 
-// Helper function to inject agent into tool methods
-const withAgent = (fn: Function, agent: StarknetAgentInterface) => {
-  return (...args: any[]) => fn(agent, ...args);
-};
-
 export class StarknetToolRegistry {
   private static tools: StarknetTool[] = [];
 
@@ -119,7 +118,6 @@ export class StarknetToolRegistry {
     const filteredTools = this.tools.filter((tool) =>
       allowed_tools.includes(tool.name)
     );
-    console.log(filteredTools);
     let tools = this.tools.filter((tool) => allowed_tools.includes(tool.name));
     return tools.map(({ name, description, schema, execute }) =>
       tool(async (params: any) => execute(agent, params), {
@@ -344,6 +342,20 @@ export const registerTools = () => {
     description: 'Get locked liquidity info for token',
     schema: contractAddressSchema,
     execute: getLockedLiquidity,
+  });
+
+  StarknetToolRegistry.registerTool({
+    name: 'deposit',
+    description: 'Deposit asset into Earn position on Vesu',
+    schema: depositEarnSchema,
+    execute: depositEarnPosition,
+  });
+
+  StarknetToolRegistry.registerTool({
+    name: 'withdraw',
+    description: 'Withdraw total amount asset from Earn position on Vesu',
+    schema: withdrawEarnSchema,
+    execute: withdrawEarnPosition,
   });
 };
 registerTools();
