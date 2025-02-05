@@ -34,6 +34,7 @@
     "build:local": "tsc src/local.ts --outDir ./dist",
     "start:local": "pnpm build:local && node dist/local.js",
     "build:frontend": "cd client && pnpm build",
+    "build:lib": "tsc -p tsconfig.build.json",
     "build": "pnpm build:backend && pnpm build:frontend",
     "dev:backend": "nest start --watch",
     "dev:frontend": "cd client && pnpm dev",
@@ -48,7 +49,7 @@
     "setup": "./scripts/setup.sh",
     "dev:script": "./scripts/dev.sh",
     "start:script": "./scripts/start.sh",
-    "prepublishOnly": "pnpm clean && pnpm install && pnpm build:backend",
+    "prepublishOnly": "pnpm clean && pnpm run build:lib",
     "test:lib": "ts-node -r tsconfig-paths/register scripts/test-lib.ts",
     "test:lib:local": "./scripts/test-release.sh"
   },
