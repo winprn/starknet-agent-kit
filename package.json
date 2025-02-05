@@ -26,9 +26,9 @@
     "LICENSE"
   ],
   "scripts": {
-    "clean": "rimraf dist node_modules client/node_modules client/.next client/dist",
-    "build:backend": "rimraf dist && nest build",
-    "clean:js": "rimraf \"src/**/*.js\"",
+    "clean": "rm -rf dist node_modules client/node_modules client/.next client/dist",
+    "build:backend": "rm -rf dist && nest build",
+    "clean:js": "rm -rf \"src/**/*.js\"",
     "local": "ts-node -r tsconfig-paths/register src/local.ts",
     "build:test": "pnpm clean:js && tsc -p tsconfig.build.json src/local.ts --outDir ./dist",
     "build:local": "tsc src/local.ts --outDir ./dist",
@@ -48,7 +48,7 @@
     "setup": "./scripts/setup.sh",
     "dev:script": "./scripts/dev.sh",
     "start:script": "./scripts/start.sh",
-    "prepublishOnly": "pnpm clean && pnpm build:backend",
+    "prepublishOnly": "pnpm clean && pnpm install && pnpm build:backend",
     "test:lib": "ts-node -r tsconfig-paths/register scripts/test-lib.ts",
     "test:lib:local": "./scripts/test-release.sh"
   },
