@@ -6,13 +6,10 @@ import { TransactionMonitor } from './plugins/core/transaction/utils/Transaction
 import { ContractInteractor } from './plugins/core/contract/utils/ContractInteractor';
 import { createAutonomousAgent } from './autonomousAgents';
 
-export const AI_PROVIDERS = ['openai', 'anthropic', 'ollama', 'gemini'] as const;
-export type AIProvider = typeof AI_PROVIDERS[number];
-
 export interface StarknetAgentConfig {
   aiProviderApiKey: string;
   aiModel: string;
-  aiProvider: AIProvider;
+  aiProvider: string;
   provider: RpcProvider;
   accountPublicKey: string;
   accountPrivateKey: string;
