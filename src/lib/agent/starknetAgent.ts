@@ -5,10 +5,14 @@ import { AccountManager } from './plugins/core/account/utils/AccountManager';
 import { TransactionMonitor } from './plugins/core/transaction/utils/TransactionMonitor';
 import { ContractInteractor } from './plugins/core/contract/utils/ContractInteractor';
 import { createAutonomousAgent } from './autonomousAgents';
+
+export const AI_PROVIDERS = ['openai', 'anthropic', 'ollama', 'gemini'] as const;
+export type AIProvider = typeof AI_PROVIDERS[number];
+
 export interface StarknetAgentConfig {
   aiProviderApiKey: string;
   aiModel: string;
-  aiProvider: 'openai' | 'anthropic' | 'ollama' | 'gemini';
+  aiProvider: AIProvider;
   provider: RpcProvider;
   accountPublicKey: string;
   accountPrivateKey: string;
