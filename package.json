@@ -1,7 +1,6 @@
 {
   "name": "starknet-agent-kit",
-  "version": "0.0.7",
-  "private": true,
+  "version": "0.0.8",
   "workspaces": [
     "client"
   ],
@@ -48,7 +47,10 @@
     "test:frontend": "cd client && pnpm test",
     "setup": "./scripts/setup.sh",
     "dev:script": "./scripts/dev.sh",
-    "start:script": "./scripts/start.sh"
+    "start:script": "./scripts/start.sh",
+    "prepublishOnly": "pnpm clean && pnpm build:backend",
+    "test:lib": "ts-node -r tsconfig-paths/register scripts/test-lib.ts",
+    "test:lib:local": "./scripts/test-release.sh"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.3",
