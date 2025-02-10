@@ -56,6 +56,9 @@ importers:
       boxen:
         specifier: ^8.0.1
         version: 8.0.1
+      agent-twitter-client:
+        specifier: ^0.0.18
+        version: 0.0.18
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
