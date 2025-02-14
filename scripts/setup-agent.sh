@@ -49,6 +49,7 @@ if ! HTTP_RESPONSE=$(curl -s -w "\n%{http_code}" --connect-timeout 10 "http://st
     exit 1
 fi
 
+
 if [ -z "$HTTP_RESPONSE" ]; then
     echo -e "${RED}Error: Empty response from server${NC}"
     exit 1
