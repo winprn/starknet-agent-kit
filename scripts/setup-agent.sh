@@ -43,9 +43,25 @@ echo -e "${GREEN}Repository has been successfully cloned to $INSTALL_DIR${NC}"
 AGENT_CONFIG_DIR="$INSTALL_DIR/config/agents"
 
 echo -e "${BLUE}Fetching agent configuration...${NC}"
-HTTP_RESPONSE=$(curl -s -w "\n%{http_code}" "http://starknetagent.ai/api/agents/$CONFIG_ID")
+
+if ! HTTP_RESPONSE=$(curl -s -w "\n%{http_code}" --connect-timeout 10 "http://starknetagent.ai/api/agents/$CONFIG_ID"); then
+    echo -e "${RED}Error: Could not connect to the server. Please check your internet connection and try again.${NC}"
+    exit 1
+fi
+
+if [ -z "$HTTP_RESPONSE" ] || ! echo "$HTTP_RESPONSE" | grep -q '^.*\n[0-9]\{3\}$'; then
+    echo -e "${RED}Error: Invalid response from server${NC}"
+    echo -e "${RED}Response: $HTTP_RESPONSE${NC}"
+    exit 1
+fi
+
 HTTP_BODY=$(echo "$HTTP_RESPONSE" | sed -n '1p')
 HTTP_STATUS=$(echo "$HTTP_RESPONSE" | sed -n '2p')
+
+if [ -z "$HTTP_STATUS" ] || [ -z "$HTTP_BODY" ]; then
+    echo -e "${RED}Error: Invalid response from server${NC}"
+    exit 1
+fi
 
 if [ "$HTTP_STATUS" = "404" ]; then
     echo -e "${RED}Error: No configuration found with ID: $CONFIG_ID${NC}"
@@ -55,6 +71,8 @@ elif [ "$HTTP_STATUS" != "200" ]; then
     echo -e "${RED}Response: $HTTP_BODY${NC}"
     exit 1
 fi
+
+
 
 echo -e "${BLUE}Updating agent configuration...${NC}"
 
