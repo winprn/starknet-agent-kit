@@ -44,7 +44,7 @@ AGENT_CONFIG_DIR="$INSTALL_DIR/config/agents"
 
 echo -e "${BLUE}Fetching agent configuration...${NC}"
 
-if ! HTTP_RESPONSE=$(curl -s -w "\n%{http_code}" --connect-timeout 10 "http://starknetagent.ai/api/agents/$CONFIG_ID"); then
+if ! HTTP_RESPONSE=$(curl -s -w "\n%{http_code}" --connect-timeout 10 "http://starkagent.ai/api/agents/$CONFIG_ID"); then
     echo -e "${RED}Error: Could not connect to the server. Please check your internet connection and try again.${NC}"
     exit 1
 fi
