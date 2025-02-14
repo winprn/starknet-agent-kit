@@ -49,9 +49,9 @@ if ! HTTP_RESPONSE=$(curl -s -w "\n%{http_code}" --connect-timeout 10 "http://st
     exit 1
 fi
 
-if [ -z "$HTTP_RESPONSE" ] || ! echo "$HTTP_RESPONSE" | grep -q '^.*\n[0-9]\{3\}$'; then
-    echo -e "${RED}Error: Invalid response from server${NC}"
-    echo -e "${RED}Response: $HTTP_RESPONSE${NC}"
+
+if [ -z "$HTTP_RESPONSE" ]; then
+    echo -e "${RED}Error: Empty response from server${NC}"
     exit 1
 fi
 
