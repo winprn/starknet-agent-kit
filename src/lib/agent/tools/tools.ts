@@ -1,6 +1,5 @@
 import { tool } from '@langchain/core/tools';
 import { RpcProvider } from 'starknet';
-import { AccountManager } from '../plugins/core/account/utils/AccountManager';
 import { TransactionMonitor } from '../plugins/core/transaction/utils/TransactionMonitor';
 import { ContractInteractor } from '../plugins/core/contract/utils/ContractInteractor';
 import { TwitterInterface } from '../plugins/twitter/interfaces';
@@ -32,7 +31,6 @@ export interface StarknetAgentInterface {
     signature: string;
   };
   getProvider: () => RpcProvider;
-  accountManager: AccountManager;
   transactionMonitor: TransactionMonitor;
   contractInteractor: ContractInteractor;
   getLimit: () => Limit;
