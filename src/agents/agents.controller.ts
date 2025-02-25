@@ -11,28 +11,26 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { AgentRequestDTO } from './dto/agents';
-import { StarknetAgent } from 'src/lib/agent/starknetAgent';
+import { StarknetAgent } from '../lib/agent/starknetAgent';
 import { AgentService } from './services/agent.service';
 import { ConfigurationService } from '../config/configuration';
 import { AgentResponseInterceptor } from 'src/lib/interceptors/response';
 import { FileTypeGuard } from 'src/lib/guard/file-validator.guard';
 import { FastifyRequest } from 'fastify';
 import { promises as fs } from 'fs';
-import { JsonConfig, load_json_config } from 'src/lib/agent/jsonConfig';
-import { throws } from 'assert';
+import { getFilename } from 'src/lib/agent/plugins/atlantic/utils/getFilename';
 
 @Controller('key')
 @UseInterceptors(AgentResponseInterceptor)
 export class AgentsController implements OnModuleInit {
   private agent: StarknetAgent;
-  private json_config: JsonConfig | undefined;
+
   constructor(
     private readonly agentService: AgentService,
     private readonly config: ConfigurationService
   ) {}
 
   onModuleInit() {
-    this.json_config = load_json_config('default.agent.json');
     this.agent = new StarknetAgent({
       provider: this.config.starknet.provider,
       accountPrivateKey: this.config.starknet.privateKey,
@@ -40,7 +38,6 @@ export class AgentsController implements OnModuleInit {
       aiModel: this.config.ai.model,
       aiProvider: this.config.ai.provider,
       aiProviderApiKey: this.config.ai.apiKey,
-      agentconfig: this.json_config,
       signature: 'key',
       agentMode: 'agent',
     });
@@ -78,7 +75,7 @@ export class AgentsController implements OnModuleInit {
     const path = process.env.PATH_UPLOAD_DIR;
     if (!path) throw new Error(`PATH_UPLOAD_DIR must be defined in .env file`);
 
-    const fullPath = "test";
+    const fullPath = await getFilename(filename.filename);
     const normalizedPath = fullPath.normalize();
 
     try {
