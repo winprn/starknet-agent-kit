@@ -26,6 +26,7 @@
     "@langchain/langgraph": "^0.2.44",
     "@langchain/ollama": "^0.1.4",
     "@langchain/openai": "^0.3.17",
+    "@libp2p/interface": "^2.6.1",
     "@starknet-agent-kit/plugin-argent": "workspace:*",
     "@starknet-agent-kit/plugin-artpeace": "workspace:*",
     "@starknet-agent-kit/plugin-atlantic": "workspace:*",

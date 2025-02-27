@@ -6,7 +6,8 @@ import { createInterface } from 'readline';
 import { loadEnvFile } from 'process';
 import { AgentWithDRP } from './agent.mjs';
 import { Chat } from '../plugins/chatdrp/src/utils/Chat.mjs';
-//import { raceEvent } from 'race-event';
+import { raceEvent } from 'race-event';
+import { Connection, Libp2p } from "@libp2p/interface";
 
 const node = new DRPNode!({
     log_config: {
@@ -49,18 +50,24 @@ async function isDialableHelper(dialableNode:DRPNode, nodeToDial:DRPNode): Promi
 const main = async () => {
     await node.start();
     await node2.start();
+    console.log("node1PeerId", node.networkNode.peerId)
+    console.log("node2PeerId", node2.networkNode.peerId)
     const result = await Promise.race([
         isDialableHelper(node, node2),
         isDialableHelper(node2, node),
-    ])
-    await Promise.race([result.dialableNode.networkNode.getMultiaddrs()?.map((addr) => 
+    ]);
+    await Promise.all([
+        Promise.race([result.dialableNode.networkNode.getMultiaddrs()?.map((addr) => 
         result.nodeThatDial.networkNode.connect(addr)    )
-    ])
+    ]),
+    raceEvent((node.networkNode["_node"] as Libp2p), "connection:open", undefined, {
+        filter: (event: CustomEvent<Connection>) => {
+            console.log(event.detail.remotePeer.toString(), event.detail.limits)
+            return event.detail.remotePeer.toString() === node2.networkNode.peerId && event.detail.limits === undefined
+        }
+    })
+])
 
-    while (!node.networkNode.getAllPeers().includes(node2.networkNode.peerId)) {
-        console.log("Connecting network nodes...");
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-    }
 
     console.log("Network nodes is dialable");
     try {
