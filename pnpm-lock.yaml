@@ -161,7 +161,7 @@ importers:
         version: link:../plugins/avnu
       '@starknet-agent-kit/plugin-chatdrp':
         specifier: workspace:*
-        version: link:../plugins/chat-drp
+        version: link:../plugins/chatdrp
       '@starknet-agent-kit/plugin-fibrous':
         specifier: workspace:*
         version: link:../plugins/fibrous
@@ -195,6 +195,9 @@ importers:
       nanospinner:
         specifier: ^1.2.2
         version: 1.2.2
+      race-event:
+        specifier: ^1.3.0
+        version: 1.3.0
 
   client:
     dependencies:
@@ -312,7 +315,7 @@ importers:
         specifier: workspace:*
         version: link:../../agents
 
-  plugins/chat-drp:
+  plugins/chatdrp:
     dependencies:
       '@ts-drp/node':
         specifier: ^0.8.5
@@ -320,6 +323,9 @@ importers:
       '@ts-drp/object':
         specifier: ^0.8.5
         version: 0.8.5(zone.js@0.15.0)
+      zod:
+        specifier: ^3.24.2
+        version: 3.24.2
     devDependencies:
       '@starknet-agent-kit/agents':
         specifier: workspace:*
@@ -15747,7 +15753,7 @@ snapshots:
       isstream: 0.1.2
       jsonwebtoken: 9.0.2
       mime-types: 2.1.35
-      retry-axios: 2.6.0(axios@1.7.9)
+      retry-axios: 2.6.0(axios@1.7.9(debug@4.4.0))
       tough-cookie: 4.1.4
     transitivePeerDependencies:
       - supports-color
@@ -18923,7 +18929,7 @@ snapshots:
 
   retimeable-signal@1.0.1: {}
 
-  retry-axios@2.6.0(axios@1.7.9):
+  retry-axios@2.6.0(axios@1.7.9(debug@4.4.0)):
     dependencies:
       axios: 1.7.9(debug@4.4.0)
 

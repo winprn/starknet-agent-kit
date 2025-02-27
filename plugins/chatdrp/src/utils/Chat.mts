@@ -16,7 +16,7 @@ export class Chat implements DRP {
 		return this.messages;
 	}
 
-	resolveConflicts(_): ResolveConflictsType {
+	resolveConflicts(_: any): ResolveConflictsType {
 		return { action: ActionType.Nop };
 	}
 }

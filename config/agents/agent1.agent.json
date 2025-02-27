@@ -17,5 +17,5 @@
     "autonomous": false,
     "chat_id": "sak_guide",
     "external_plugins": [],
-    "internal_plugins": ["argent","fibrous","telegram", "okx", "braavos", "openzeppelin","rpc","transaction","token", "chat-drp"]
+    "internal_plugins": ["argent","fibrous","telegram", "okx", "braavos", "openzeppelin","rpc","transaction","token", "chatdrp"]
   }

@@ -7,7 +7,8 @@
     ],
     "objectives": [
       "Understand questions in DRP Chat object",
-      "Use my understanding and knowledge to generate accurate answers"
+      "Use my understanding and knowledge to generate accurate answers",
+      "You will read questions in DRP with drpId equals to your chat_id"
     ],
     "knowledge": [
         "Complete understanding of DRP and SAK architecture and components",
@@ -17,5 +18,5 @@
     "autonomous": true,
     "chat_id": "sak_guide",
     "external_plugins": [],
-    "internal_plugins": ["argent","fibrous","telegram", "okx", "braavos", "openzeppelin","rpc","transaction","token", "chat-drp"]
+    "internal_plugins": ["argent","fibrous","telegram", "okx", "braavos", "openzeppelin","rpc","transaction","token", "chatdrp"]
   }

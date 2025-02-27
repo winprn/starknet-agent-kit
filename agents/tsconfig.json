@@ -13,7 +13,7 @@
     "src/**/*",
     "./common/**/*",
     "./start.ts",
-    "./index.ts" 
+    "./index.ts"
   ],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist"],
 }

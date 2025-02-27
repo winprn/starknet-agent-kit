@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "pnpm clean:dist && tsc",
@@ -20,6 +21,7 @@
   "description": "",
   "dependencies": {
     "@ts-drp/node": "^0.8.5",
-    "@ts-drp/object": "^0.8.5"
+    "@ts-drp/object": "^0.8.5",
+    "zod": "^3.24.2"
   }
 }
