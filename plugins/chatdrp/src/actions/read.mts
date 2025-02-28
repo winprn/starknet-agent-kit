@@ -22,9 +22,10 @@ export class ReadDRPService {
     }
 }
 
-export const read = async (agent: AgentWithDRP, params: ReadSchema): Promise<string[]> => {
+export const read = async (agent: AgentWithDRP, params: string): Promise<string[]> => {
     console.log("Reading DRP", params);
-    const readDrpService = new ReadDRPService(agent.node, params.drpId);
+    const param: ReadSchema = JSON.parse(params);
+    const readDrpService = new ReadDRPService(agent.node, param.drpId);
 
     return await readDrpService.read();
 }
