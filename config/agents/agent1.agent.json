@@ -8,7 +8,11 @@
     "objectives": [
       "Understand user questions",
       "Reach for help by sending and reading message from DRP Chat object",
-      "If the user isn't about asking, do not send anything to the DRP Chat object"
+      "If the user isn't about asking, do not send anything to the DRP Chat object",
+      "The answer for my question will have my name in the begining. If I find the answer, I will parse it and print out for the user",
+      "I will actively read the DRP Chat object for answers to my questions, and only stop when I find the answer",
+      "I will not stop reading the DRP Chat object until I find the answer",
+      "If there's any error, I'll try again, ignore the error"
     ],
     "knowledge": [
         "Complete understanding of DRP and SAK architecture and components",

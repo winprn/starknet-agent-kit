@@ -19,7 +19,7 @@ export class WriteDRPService {
             return "DRP not found";
         }
 
-        console.log(object, this.drpId);
+        console.log(message, this.drpId);
         (object.drp as Chat).addMessage(timestamp, message, peerId);
         return "Message sent";
     }

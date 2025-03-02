@@ -18,6 +18,8 @@ export class ReadDRPService {
         }
 
         const messages = (object.drp as Chat).query_messages();
+        console.log("Read DRP", this.drpId, messages);
+
         return Array.from(messages);
     }
 }

@@ -46,9 +46,11 @@ const main = async () => {
         console.log("Wait for dialing", node.networkNode.peerId);
         await new Promise((resolve) => setTimeout(resolve, 1000));
     }
+    while (node.networkNode.getAllPeers().length < 3) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
 
     try {
-        console.log(node.networkNode.getAllPeers());
         await node.connectObject({
             id: "test",
             drp: new Chat(),
@@ -84,8 +86,9 @@ const main = async () => {
         });
 
         const resp = await agent.execute(`
-            Please parse the following message and put it into the DRP to ask for an answer. If the message is not a question, please follow it's instructions, dont ask for an answer:
+            If the following message is not a question, please follow it's instructions, dont ask to DRP for an answer:
             ${line}.
+            Otherwise, please send it to the DRP.
             You'll need to pass along the message, the timestamp, and the peerId, which is your name.
             You'll also need to pass along the DRP ID, which is test.
             Please pass the value as an object corresponding to the SendSchema.
