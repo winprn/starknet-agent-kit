@@ -1,14 +1,14 @@
 import { ChatAnthropic } from '@langchain/anthropic';
-import { AiConfig } from '../common';
+import { AiConfig } from '../common/index.js';
 import { ChatOpenAI } from '@langchain/openai';
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { ChatOllama } from '@langchain/ollama';
 import { ChatDeepSeek } from '@langchain/deepseek';
-import { StarknetAgentInterface } from './tools/tools';
-import { createSignatureTools } from './tools/signatureTools';
+import { StarknetAgentInterface } from './tools/tools.js';
+import { createSignatureTools } from './tools/signatureTools.js';
 import { createReactAgent } from '@langchain/langgraph/prebuilt';
-import { createAllowedToollkits } from './tools/external_tools';
-import { createAllowedTools } from './tools/tools';
+import { createAllowedToollkits } from './tools/external_tools.js';
+import { createAllowedTools } from './tools/tools.js';
 
 export const createAgent = async (
   starknetAgent: StarknetAgentInterface,
@@ -52,16 +52,16 @@ export const createAgent = async (
         return new ChatOllama({
           model: aiConfig.aiModel,
         });
-        case 'deepseek':
-          if (!aiConfig.aiProviderApiKey) {
-            throw new Error(
-              'Valid DeepSeek api key is required https://api-docs.deepseek.com/'
-            );
-          }
-          return new ChatDeepSeek({
-            modelName: aiConfig.aiModel,
-            apiKey: aiConfig.aiProviderApiKey,
-          });
+      case 'deepseek':
+        if (!aiConfig.aiProviderApiKey) {
+          throw new Error(
+            'Valid DeepSeek api key is required https://api-docs.deepseek.com/'
+          );
+        }
+        return new ChatDeepSeek({
+          modelName: aiConfig.aiModel,
+          apiKey: aiConfig.aiProviderApiKey,
+        });
       default:
         throw new Error(`Unsupported AI provider: ${aiConfig.aiProvider}`);
     }

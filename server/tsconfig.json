@@ -1,6 +1,8 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
@@ -11,10 +13,8 @@
     "./common/**/*",
     "./config/**/*",
     "./index.ts",
-    "./src/**/*", 
+    "./src/**/*",
     "./main.ts"
-  ],  "exclude": [
-    "node_modules", 
-    "dist", 
-  ]
+  ],
+  "exclude": ["node_modules", "dist"]
 }
