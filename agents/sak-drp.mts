@@ -1,7 +1,7 @@
 import { DRPNode } from '@ts-drp/node';
-import { StarknetAgent } from './src/starknetAgent';
+import { StarknetAgent } from 'agents/src/starknetAgent.js';
 import { RpcProvider } from 'starknet';
-import { load_json_config } from './src/jsonConfig';
+import { load_json_config } from './src/jsonConfig.js';
 import { createInterface } from 'readline';
 import { loadEnvFile } from 'process';
 import { AgentWithDRP } from './agent.mjs';

@@ -1,5 +1,5 @@
 import { DRPNode } from "@ts-drp/node";
-import { StarknetAgent } from "./src/starknetAgent";
+import { StarknetAgent } from "./src/starknetAgent.js";
 
 export class AgentWithDRP extends StarknetAgent {
     node: DRPNode
