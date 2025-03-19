@@ -14,7 +14,7 @@ export const registerTools = (StarknetToolRegistry: StarknetTool[]) => {
     StarknetToolRegistry.push({
         name: 'read_message_to_drp',
         description:
-          'Read a message to a DRP with provided drpId',
+          'Read a message to a DRP with provided drpId, can be used to read all messages and monitor the DRP',
         plugins: 'chatdrp',
         execute: read,
     });

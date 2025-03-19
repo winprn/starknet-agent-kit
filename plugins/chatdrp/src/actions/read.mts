@@ -4,7 +4,16 @@ import { Chat } from "../utils/Chat.mjs";
 import { AgentWithDRP, ReadSchema } from "../schema/schema.mjs";
 
 export class ReadDRPService {
-    static node: DRPNode = new DRPNode({});
+    static node: DRPNode = new DRPNode({
+        log_config: {
+            level: "error",
+        },
+        network_config: {
+            log_config: {
+                level: "error",
+            }
+        },
+    });
     drpId: string;
     constructor(drpId: string) {
         this.drpId = drpId;
@@ -19,7 +28,7 @@ export class ReadDRPService {
             if (!object) {
                 return [];
             }
-
+            (object.drp as Chat).addMessage(Date.now().toString(), "Read", ReadDRPService.node.networkNode.peerId);
             const messages = (object.drp as Chat).query_messages();
             console.log("Read DRP", this.drpId, messages);
 
@@ -33,6 +42,11 @@ export class ReadDRPService {
             console.log("Network nodes is dialable", ReadDRPService.node.networkNode.peerId);
         })) {
             console.log("Wait for dialing", ReadDRPService.node.networkNode.peerId);
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
+
+        while (this.node.networkNode.getAllPeers().length < 3) {
+            console.log("Wait for peers", this.node.networkNode.peerId);
             await new Promise((resolve) => setTimeout(resolve, 1000));
         }
 

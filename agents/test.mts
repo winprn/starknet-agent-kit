@@ -1,6 +1,7 @@
 import { DRPNode } from "@ts-drp/node";
 import { Chat } from "../plugins/chatdrp/src/utils/Chat.mjs";
 import { createInterface } from "readline";
+import { ObjectACL } from "@ts-drp/object";
 
 const node2 = new DRPNode({
     log_config: {
@@ -27,6 +28,10 @@ const main = async () => {
     const obj = await node2.createObject({
         id: "test",
         drp: new Chat(),
+        acl: new ObjectACL({
+            permissionless: true,
+            admins: new Map([])
+        })
     })
 
     while (true) {
